@@ -1,0 +1,105 @@
+.admin-manage-container {
+    display: flex;
+    margin-top: 80px;
+    .content {
+        width: 80%;
+        padding: 20px;
+        .manage-body {
+            .title {
+                text-align: center;
+                margin: 30px 0 40px;
+                font-size: 2.6rem;
+            }
+
+            .table-container {
+                position: relative;
+                font-size: 1.8rem;
+                .table-head {
+                    box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.15);
+                    table {
+                        width: 100%;
+                        position: relative;
+                        overflow: hidden;
+                        border-top-left-radius: 10px;
+                        border-top-right-radius: 10px;
+                        border-collapse: collapse;
+                        color: gray;
+                        table-layout: fixed;
+
+                        .table-header {
+                            background-color: #6c7ae0;
+                            color: #fff;
+
+                            th {
+                                padding: 16px 12px;
+                            }
+                        }
+                    }
+                }
+
+                .table-body {
+                    max-height: 400px;
+                    overflow: auto;
+                    position: relative;
+                    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.15);
+
+                    table {
+                        width: 100%;
+                        position: relative;
+                        overflow: hidden;
+                        border-bottom-left-radius: 10px;
+                        border-bottom-right-radius: 10px;
+                        border-collapse: collapse;
+                        color: gray;
+                        table-layout: fixed;
+
+                        thead {
+                            width: 100%;
+                        }
+
+                        tbody {
+                        }
+
+                        td,
+                        th {
+                            padding: 16px;
+                        }
+
+                        .action {
+                            display: flex;
+                            gap: 36px;
+
+                            .btn-view {
+                                border: none;
+                                outline: none;
+                                font-size: 2rem;
+                                color: green;
+                                background-color: transparent;
+                            }
+
+                            .btn-edit {
+                                border: none;
+                                outline: none;
+                                font-size: 2rem;
+                                color: orange;
+                                background-color: transparent;
+                            }
+
+                            .btn-delete {
+                                border: none;
+                                outline: none;
+                                font-size: 2rem;
+                                color: red;
+                                background-color: transparent;
+                            }
+                        }
+
+                        tr:nth-child(even) {
+                            background-color: #f8f6ff;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

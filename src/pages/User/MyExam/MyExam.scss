@@ -1,0 +1,43 @@
+.my-exam-container {
+    display: flex;
+    margin-top: 80px;
+
+    .content {
+        width: 80%;
+        padding: 20px;
+
+        .header-exam {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .add-exam {
+                font-size: 1.9rem;
+                font-weight: 600;
+                color: #616161;
+                text-decoration: none;
+
+                &:hover {
+                    cursor: pointer;
+                    text-decoration: underline;
+                }
+            }
+        }
+        .table-body {
+            .action {
+                overflow: visible;
+                display: flex;
+                gap: 30px !important;
+            }
+        }
+        .hidden-password {
+            -webkit-text-security: disc;
+            -moz-text-security: disc;
+            text-security: disc;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}

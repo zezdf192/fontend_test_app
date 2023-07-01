@@ -1,0 +1,15 @@
+const actionTypes = Object.freeze({
+    //App
+    CHANGE_LANGUAGE: 'CHANGE_LANGUAGE',
+    LOG_OUT: 'LOG_OUT',
+
+    //user
+    USER_LOGIN_WITH_SOCIAL_SUCCESS: 'USER_LOGIN_WITH_SOCIAL_SUCCESS',
+    UPDATE_USER: 'UPDATE_USER',
+
+    FETCH_USER_LOGIN: 'FETCH_USER_LOGIN',
+    USER_LOGIN_SUCCESS: 'USER_LOGIN_SUCCESS',
+    USER_LOGIN_FAIL: 'USER_LOGIN_FAIL',
+})
+
+export default actionTypes

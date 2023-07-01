@@ -1,0 +1,147 @@
+.create-exam-container {
+    margin-top: 120px;
+    .create-exam-content {
+        .header {
+            .title {
+                text-align: center;
+                font-size: 2.6rem;
+                margin-bottom: 30px;
+            }
+        }
+
+        .body {
+            font-size: 1.8rem;
+            .content-top {
+                margin: 40px 100px;
+                display: flex;
+                justify-content: space-between;
+                gap: 40px;
+
+                .error-message {
+                    display: block;
+                    color: red;
+                    font-size: 1.6rem;
+                    margin-top: 8px;
+                }
+
+                .img-body {
+                    display: flex;
+                    gap: 30px;
+
+                    margin-top: 30px;
+
+                    .left-ct {
+                        display: flex;
+                        .btn-img {
+                            outline: none;
+                            padding: 4px 13px;
+                            background-color: #00c6d4;
+                            color: #fff;
+                            border-radius: 6px;
+                            max-width: 100px;
+
+                            &:hover {
+                                cursor: pointer;
+                            }
+                        }
+
+                        .img {
+                            border-radius: 3px;
+                            max-width: 300px;
+                            max-height: 300px;
+                            margin-left: 60px;
+                        }
+                    }
+
+                    span {
+                        font-size: 1.8rem;
+                    }
+                }
+
+                .type-exam {
+                    display: flex;
+                    margin-top: 30px;
+                    font-size: 1.8rem;
+                    justify-content: space-between;
+                    gap: 60px;
+
+                    .title-type-exam {
+                        min-width: 150px;
+                    }
+
+                    .type-item {
+                        //margin-left: 60px;
+                        width: 40%;
+
+                        label {
+                            margin-left: 6px;
+                        }
+
+                        span {
+                            display: block;
+                            margin-top: 8px;
+                        }
+                    }
+                }
+
+                .left {
+                    width: 50%;
+                    input {
+                        font-size: 2rem;
+                    }
+                }
+
+                .description {
+                    width: 46%;
+                    textarea {
+                        font-size: 1.8rem;
+                    }
+                }
+            }
+
+            .content-bottom {
+                margin-top: 40px;
+                padding: 40px 0;
+                background-color: #eeeeee;
+
+                .question-container {
+                    margin: 0 100px;
+                    padding: 20px;
+
+                    .action {
+                        margin-top: 30px;
+                        display: flex;
+                        justify-content: flex-end;
+                        gap: 70px;
+                        align-items: center;
+                        text-align: right;
+
+                        .error-bottom {
+                            color: red;
+                        }
+
+                        .btn-add {
+                            border: none;
+                            outline: none;
+                            background-color: #00c6d4;
+                            color: #fff;
+                            padding: 6px 12px;
+                            margin-right: 20px;
+                            border-radius: 5px;
+                        }
+
+                        .btn-save {
+                            border: none;
+                            outline: none;
+                            background-color: purple;
+                            color: #fff;
+                            padding: 6px 12px;
+
+                            border-radius: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,60 @@
+.result-exam-container {
+    margin: 80px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .result-exam-header {
+        //max-width: 800px;
+        padding: 40px 0;
+        width: 54%;
+
+        display: flex;
+
+        flex-direction: column;
+        align-items: center;
+        margin-top: 50px;
+
+        box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.2);
+
+        &.private {
+            margin-top: 150px;
+        }
+        .title {
+            text-align: center;
+            //padding-top: 50px;
+            margin-bottom: 20px;
+
+            font-size: 2.2rem;
+        }
+
+        .result-infor {
+            // .private {
+            //     margin-left: 500px;
+            // }
+            width: 80%;
+
+            font-size: 1.8rem;
+            .detail-title {
+                margin-top: 10px;
+                display: inline-block;
+                min-width: 270px;
+            }
+
+            .detail-description {
+                margin-left: 40px;
+            }
+
+            .col-12 {
+                padding-left: 0px !important;
+            }
+        }
+    }
+
+    .question-list {
+        h2 {
+            font-size: 2.2rem;
+            margin-top: 40px;
+        }
+    }
+}

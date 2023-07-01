@@ -1,0 +1,39 @@
+.modal-body {
+    padding: 10px 14px !important;
+    .description-container {
+        white-space: nowrap; /* Tránh ngắn gọn nội dung trên một dòng */
+        //overflow: visible; /* Ẩn phần dư của nội dung khi vượt quá độ dài */
+        text-overflow: ellipsis; /* Hiển thị dấu chấm elipsis (...) khi nội dung bị ẩn */
+    }
+
+    .detail-title {
+        display: inline-block;
+        min-width: 270px;
+    }
+
+    .detail-description {
+        margin-left: 40px;
+
+        &.hidden-password {
+            -webkit-text-security: disc;
+            -moz-text-security: disc;
+            text-security: disc;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.ratings-go-btn {
+    margin-right: 12px;
+    text-decoration: none;
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: #616161;
+    &:hover {
+        color: #616161;
+        text-decoration: underline;
+    }
+}

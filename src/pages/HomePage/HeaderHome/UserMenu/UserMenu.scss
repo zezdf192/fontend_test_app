@@ -1,0 +1,56 @@
+.user-menu-container {
+    padding: 8px 24px;
+    animation: Tippy-module_fadeIn__2LeID 0.3s ease;
+    .user-menu-header {
+        display: flex;
+
+        .user-menu-title {
+            margin-left: 12px;
+            display: flex;
+            flex-direction: column;
+
+            .name {
+                color: #292929;
+                font-size: 1.6rem;
+                font-weight: 600;
+            }
+
+            .email {
+                color: #757575;
+                font-size: 1.4rem;
+                margin-top: 4px;
+            }
+        }
+    }
+
+    .user-menu-body {
+        .user-meu-item {
+            border: none;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+            a {
+                color: #666;
+                cursor: pointer;
+                display: block;
+                font-size: 1.4rem;
+                padding: 10px 0;
+                text-decoration: none;
+
+                &:hover {
+                    color: #000;
+                }
+            }
+        }
+    }
+}
+
+@keyframes Tippy-module_fadeIn__2LeID {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

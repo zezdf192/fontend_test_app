@@ -1,0 +1,29 @@
+.exam-item-container {
+    width: 100%;
+    .exam-item-body {
+        padding: 8px 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        &:hover {
+            background: rgba(22, 24, 35, 0.03);
+        }
+
+        .exam-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .exam-item-content {
+            .exam-item-title {
+                font-size: 1.8rem;
+            }
+
+            .quantity-join {
+                color: rgba(22, 24, 35, 0.5);
+            }
+        }
+    }
+}

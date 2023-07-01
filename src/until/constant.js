@@ -1,0 +1,18 @@
+export const path = {
+    home: '/',
+    about: '/about',
+    login: '/login',
+    signUp: '/signUp',
+    admin: '/admin',
+    manageUser: '/admin/manageUser',
+    manageExam: '/admin/manageExam',
+    createExam: '/createExam',
+    editExam: '/editExam/:examId',
+    verification: '/verification/:examId',
+    startExam: '/exam/:examId',
+    resultExam: '/result/:examId',
+    myExam: '/myExam',
+    myDoExam: '/mydoExam',
+    ratings: '/ratings/:examId',
+    setting: '/settings/personal',
+}

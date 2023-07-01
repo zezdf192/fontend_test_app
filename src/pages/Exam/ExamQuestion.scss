@@ -1,0 +1,55 @@
+.exam-question-container {
+    min-height: 450px;
+    .exam-question-body {
+        padding: 20px;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+
+            .title {
+                text-transform: none;
+                font-size: 2.2rem;
+                line-height: 1.5;
+                margin-bottom: 20px;
+            }
+
+            .score {
+                min-width: 10%;
+                margin-top: 10px;
+                margin-right: -10px;
+            }
+        }
+
+        .img {
+            text-align: center;
+
+            img {
+                max-width: 200px;
+                max-height: 200px;
+            }
+        }
+
+        .list-answer {
+            margin-top: 20px;
+
+            .answer-item {
+                margin-bottom: 20px;
+                font-size: 1.9rem;
+
+                &:hover {
+                    color: green;
+                    cursor: pointer;
+                }
+
+                &.active {
+                    color: orange;
+                }
+
+                span {
+                    margin-right: 20px;
+                }
+            }
+        }
+    }
+}
