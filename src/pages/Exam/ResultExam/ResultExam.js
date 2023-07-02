@@ -44,7 +44,6 @@ function ResultExam() {
         callAPI()
     }, [])
 
-    console.log(typeAnswer)
     return (
         <>
             <HeaderHome />
@@ -61,7 +60,7 @@ function ResultExam() {
                                 <span className="detail-title">{t('result.exam-results')}</span>
                                 <span>:</span>
                                 <span className="detail-description">
-                                    {myAnswer && myAnswer.data && myAnswer.data.maxScore}
+                                    {myAnswer && myAnswer.data && myAnswer.data.currentScore}
                                 </span>
                             </div>
                             <div className="col-12">
@@ -70,8 +69,8 @@ function ResultExam() {
                                 <span className="detail-description">
                                     {myAnswer && myAnswer.data
                                         ? language === 'en'
-                                            ? myAnswer.data.timeEn
-                                            : myAnswer.data.timeVi
+                                            ? myAnswer.data.currentTimeEn
+                                            : myAnswer.data.currentTimeVi
                                         : ''}
                                 </span>
                             </div>
@@ -89,7 +88,7 @@ function ResultExam() {
                                 <span className="detail-description">
                                     {myAnswer &&
                                         myAnswer.data &&
-                                        `${myAnswer.data.qualityAnswerTrue}/${myAnswer.data.answers.length}`}
+                                        `${myAnswer.data.currentQuantityAnswerTrue}/${myAnswer.data.answers.length}`}
                                 </span>
                             </div>
                         </div>

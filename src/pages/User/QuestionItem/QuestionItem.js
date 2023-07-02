@@ -13,6 +13,7 @@ function QuestionItem({
     isValid,
     maxScore,
     listScoreQuestion,
+    scoreInitQuestion,
     dataParent,
     stt,
     bottom,
@@ -78,6 +79,7 @@ function QuestionItem({
 
     const messagesEndRef = useRef(null)
     let inputRef = useRef()
+    let targetRef = useRef()
 
     const scrollToBottom = () => {
         if (bottom && !isScroll) {
@@ -183,10 +185,11 @@ function QuestionItem({
 
     useEffect(() => {
         setListScore(listScoreQuestion)
-        //console.log(listScoreQuestion)
-        if (!selectedScore) {
-            setSelectedScore(listScoreQuestion[0])
-        }
+
+        // set current score equal max score when user change max score
+
+        setSelectedScore(scoreInitQuestion)
+        //}
     }, [listScoreQuestion])
 
     useEffect(() => {
@@ -280,6 +283,22 @@ function QuestionItem({
         }
     }
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (targetRef.current && !targetRef.current.contains(event.target)) {
+                // Xử lý khi click ra ngoài phần tử mục tiêu
+                setIsModalScore(false)
+                //console.log('Click ra ngoài phần tử mục tiêu')
+            }
+        }
+
+        document.addEventListener('click', handleClickOutside)
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside)
+        }
+    }, [])
+
     return (
         <>
             <div className="question-item-container">
@@ -301,7 +320,7 @@ function QuestionItem({
                                 <span className="error-message">{t(errTitle)}</span>
                             </div>
                             <div className="score-container">
-                                <div className="top-ct">
+                                <div className="top-ct" ref={targetRef}>
                                     <label>{t('crud-exam.score')} </label>
 
                                     <div className="score-body">

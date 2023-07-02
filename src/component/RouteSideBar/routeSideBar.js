@@ -7,6 +7,10 @@ export let sideBarUser = [
         text: 'home-page.your-exam',
     },
     {
+        to: '/favorite',
+        text: 'detail-user.favorite-exam',
+    },
+    {
         to: '/myDoExam',
         text: 'home-page.exam-participated',
     },

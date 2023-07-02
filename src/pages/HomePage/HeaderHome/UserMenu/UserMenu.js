@@ -50,7 +50,7 @@ function UserMenu() {
                     </div>
                     <div className="user-meu-item">
                         <Link to={path.myExam}>{t('detail-user.my-exam')}</Link>
-                        <a href="/">{t('detail-user.favorite-exam')}</a>
+                        <Link to={path.myLoveExam}>{t('detail-user.favorite-exam')}</Link>
                     </div>
 
                     <div className="user-meu-item" style={{ marginBottom: '0' }}>

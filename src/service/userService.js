@@ -37,6 +37,30 @@ const updateUserByEmail = (data) => {
     return axios.post(`/api/update-user-by-email`, data)
 }
 
+const editPassword = (data) => {
+    return axios.post(`/api/edit-password`, data)
+}
+
+const getExamUserLike = (data) => {
+    return axios.post(`/api/get-exam-user-like`, data)
+}
+
+const userLikeExam = (data) => {
+    return axios.post(`/api/user-like-exam`, data)
+}
+
+const getAllExamUserLike = (data) => {
+    return axios.post(`/api/get-all-exam-user-like`, data)
+}
+
+const getCodeForgotPassword = (data) => {
+    return axios.post(`/api/get-code-forgot-password`, data)
+}
+
+const changePassword = (data) => {
+    return axios.post(`/api/change-password`, data)
+}
+
 export default {
     login,
     createNewUser,
@@ -46,4 +70,10 @@ export default {
     loginAppBySocial,
     getDetailUser,
     updateUserByEmail,
+    editPassword,
+    getExamUserLike,
+    userLikeExam,
+    getAllExamUserLike,
+    getCodeForgotPassword,
+    changePassword,
 }

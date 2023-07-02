@@ -269,7 +269,7 @@ function ModalDetailUser({ handleCloseModalDetail, isOpenModal, data, type, rati
                 <Modal.Body>{showViewContentModal()}</Modal.Body>
                 <Modal.Footer>
                     {ratings && (
-                        <Link to={`/ratings/${data.data.examID}`} className="ratings-go-btn" variant="secondary">
+                        <Link to={`/ratings/${data._id}`} className="ratings-go-btn" variant="secondary">
                             {t('ratings.ratings')}
                         </Link>
                     )}

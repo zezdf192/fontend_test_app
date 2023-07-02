@@ -201,7 +201,9 @@ function StartExam() {
         let data = {
             userID: user.userInfo._id,
             timeEn: handleTimeDoExam('en'),
+            currentTimeEn: handleTimeDoExam('en'),
             timeVi: handleTimeDoExam('vi'),
+            currentTimeVi: handleTimeDoExam('vi'),
             answers: myAnswer,
             examID: examId,
             nameUser: user.userInfo.name,
@@ -209,10 +211,12 @@ function StartExam() {
             quantityQuestion: examInfo.data.questions.length,
             scoreExam: examInfo.data.score.valueNum,
             qualityAnswerTrue: quality,
-
+            currentQuantityAnswerTrue: quality,
             quantityJoin: 1,
             maxScore: total,
+            currentScore: total,
             valueTimeDoExam: Math.floor(timeDoExam),
+            currentValueTimeDoExam: Math.floor(timeDoExam),
             //valueTimeDoExamGreatest: Math.floor(timeDoExam),
             dateDoExam: newDate,
             //dateDoExamLast: newDate,

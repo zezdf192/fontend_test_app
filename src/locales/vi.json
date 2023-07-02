@@ -71,7 +71,8 @@
         "description": "Mô tả bài thi: ",
         "text": "Đảm bảo rằng bạn đang ở trong một môi trường yên tĩnh với kết nối internet ổn định và hạn chế bị phân tâm. Chúc may mắn!",
         "back": "Quay lại trang chủ",
-        "start": "Bắt đầu bài thi"
+        "start": "Bắt đầu bài thi",
+        "like-count": "Số lượt yêu thích: "
     },
     "result": {
         "exam-results": "Kết quả bài thi của bạn",
@@ -257,10 +258,50 @@
         "cancel": "Hủy",
         "password": "Mật khẩu",
         "add-password": "Thêm mật khẩu",
-        "email": "Email"
+        "email": "Email",
+        "new-password": "Nhập mật khẩu mới",
+        "confirm-password": "Nhập lại mật khẩu",
+        "old-password": "Nhập mật khẩu cũ",
+        "forgot-password": "Quên mật khẩu?"
     },
     "toast": {
         "update-success": "Cập nhật thành công",
-        "update-fail": "Câp nhật thất bại"
+        "update-fail": "Câp nhật thất bại",
+        "incomplete-input": "Nhập thiếu dữ liệu",
+        "not-correct": "Mật khẩu nhập lại chưa chính xác",
+        "err-password-long": "Mật khẩu phải dài hơn hoặc bằng 6 ký tự",
+        "incorrect-password": "Mật khẩu không chính xác",
+        "invalid": "Chưa nhập đúng định dạng dữ liệu",
+        "send-fail": "Gửi mã thất bại",
+        "incorrect-code": "Mã xác nhận không chính xác"
+    },
+    "not-found": {
+        "no-data": "Không tìm thấy nội dung",
+        "url-top": "URL của nội dung này đã bị thay đổi hoặc không còn tồn tại",
+        "url-bottom": "Nếu bạn đang lưu URL này, hãy thử truy cập lại từ trang chủ thay vì dùng URL đã lưu",
+        "access-homepage": "Truy cập trang chủ",
+        "or-go-to": "hoặc đi tới",
+        "login": "Đăng nhập"
+    },
+    "favorite": {
+        "introduction": "Giới thiệu",
+        "feature": "Là một chức năng cho phép người dùng lưu trữ những bài thi yêu thích",
+        "favorite-exams": "Các bài thi yêu thích",
+        "no-exam": "Bạn chưa thích bất kỳ bài thi nào",
+        "view-more": "Xem nhiều hơn",
+        "here": "tại đây"
+    },
+    "forgot-password": {
+        "forgot-password": "Quên mật khẩu",
+        "check-email": "Kiểm tra email để lấy mã xác minh",
+        "email": "Nhập email",
+        "code": "Nhập mã xác minh",
+        "confirm": "Xác nhận",
+        "send-code": "Gửi mã",
+        "resend-code": "Gửi lại mã",
+        "auto": "Tự động gửi lại mã sau ",
+        "s": "giây",
+        "change-password": "Thay đổi mật khẩu",
+        "new-password": "Nhập mật khẩu mới"
     }
 }

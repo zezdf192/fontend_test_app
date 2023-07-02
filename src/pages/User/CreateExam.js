@@ -72,6 +72,8 @@ function CreateExam() {
     const [listLimit, setListLimit] = useState([])
     const [listTime, setListTime] = useState([])
 
+    const [scoreInitQuestion, setScoreInitQuestion] = useState(null)
+
     //function change
     let handleChangeScore = (option) => {
         setSelectedScore(option)
@@ -173,6 +175,7 @@ function CreateExam() {
         copySelectedLimit.label = language === 'en' ? copySelectedLimit.labelEn : copySelectedLimit.labelVi
         copySelectedTime.label = language === 'en' ? copySelectedTime.labelEn : copySelectedTime.labelVi
 
+        scoreInitQuestion(selectedScore.valueNum)
         setSelectedScore(copySelectedScore)
         setSelectedLimit(copySelectedLimit)
         setSelectedTime(copySelectedTime)
@@ -182,18 +185,24 @@ function CreateExam() {
         callAPI()
     }, [language])
 
-    let buildScoreQuestion = () => {
+    let buildScoreQuestion = (scoreActive) => {
         let array = []
-        //console.log(selectedScore)
 
-        //console.log(maxScore)
-        if (selectedScore && selectedScore.valueNum) {
-            let space = selectedScore.valueNum / 20
-
+        if (scoreActive) {
+            let space = scoreActive / 10
             for (let i = 1; i <= 10; i++) {
                 let score = space * i
 
-                array.push(score)
+                array.push(score.toFixed(3))
+            }
+        } else {
+            if (selectedScore && selectedScore.valueNum) {
+                let space = selectedScore.valueNum / 10
+                for (let i = 1; i <= 10; i++) {
+                    let score = space * i
+
+                    array.push(score)
+                }
             }
         }
 
@@ -201,8 +210,17 @@ function CreateExam() {
     }
 
     useEffect(() => {
-        let array = buildScoreQuestion()
-        setScoreQuestion([...array])
+        //let array = buildScoreQuestion()
+
+        let resultScore = selectedScore && selectedScore.valueNum / listQuestions.length
+
+        let arrayListScore = buildScoreQuestion(resultScore)
+
+        setScoreQuestion([...arrayListScore])
+
+        setScoreInitQuestion(resultScore)
+
+        //setScoreQuestion([...array])
     }, [selectedScore])
 
     //handle children component
@@ -216,6 +234,7 @@ function CreateExam() {
                 return (
                     <QuestionItem
                         isValid={isValid}
+                        scoreInitQuestion={scoreInitQuestion}
                         maxScore={selectedScore && selectedScore.label}
                         listScoreQuestion={scoreQuestion}
                         dataParent={item}
@@ -367,6 +386,7 @@ function CreateExam() {
             typeExam: typeExam,
             typeAnswer: typeAnswer,
             questions: listQuestions,
+            quantityLike: [],
             image: file,
             quantityJoin: 0,
             dateExam: newDate,
@@ -391,6 +411,34 @@ function CreateExam() {
         reader.onload = () => {
             setFile(reader.result)
         }
+    }
+
+    let handleAddNewQuestion = () => {
+        let resultScore = selectedScore.valueNum / (listQuestions.length + 1)
+
+        setScoreInitQuestion(resultScore)
+        //console.log('resultScore', resultScore)
+
+        // / listQuestions.length + 1
+
+        let array = buildScoreQuestion(resultScore)
+
+        //console.log('array', array)
+        setScoreQuestion([...array])
+
+        //console.log(listQuestions)
+        listQuestions.forEach((item) => (item.bottom = false))
+        setListQuestions([
+            ...listQuestions,
+            {
+                title: '',
+                bottom: true,
+                image: null,
+                score: null,
+                questionId: 'id-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now(),
+                answers: [],
+            },
+        ])
     }
 
     return (
@@ -547,27 +595,7 @@ function CreateExam() {
                                 <div className="action">
                                     <span className="error-bottom">{t(error)}</span>
                                     <div>
-                                        <button
-                                            className="btn-add"
-                                            onClick={() => {
-                                                listQuestions.forEach((item) => (item.bottom = false))
-                                                setListQuestions([
-                                                    ...listQuestions,
-                                                    {
-                                                        title: '',
-                                                        bottom: true,
-                                                        image: null,
-                                                        score: null,
-                                                        questionId:
-                                                            'id-' +
-                                                            Math.random().toString(36).substr(2, 9) +
-                                                            '-' +
-                                                            Date.now(),
-                                                        answers: [],
-                                                    },
-                                                ])
-                                            }}
-                                        >
+                                        <button className="btn-add" onClick={() => handleAddNewQuestion()}>
                                             {t('crud-exam.add-question')}
                                         </button>
                                         <button className="btn-save" onClick={handleSaveExam}>

@@ -10,6 +10,9 @@ const actionTypes = Object.freeze({
     FETCH_USER_LOGIN: 'FETCH_USER_LOGIN',
     USER_LOGIN_SUCCESS: 'USER_LOGIN_SUCCESS',
     USER_LOGIN_FAIL: 'USER_LOGIN_FAIL',
+
+    FETCH_USER_SIGNUP: 'FETCH_USER_SIGNUP',
+    USER_SIGNUP_FAIL: 'USER_SIGNUP_FAIL',
 })
 
 export default actionTypes

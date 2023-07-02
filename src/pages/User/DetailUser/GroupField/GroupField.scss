@@ -32,6 +32,38 @@
                         margin: 0;
                     }
 
+                    .forgot-password {
+                        margin-top: 8px;
+                        text-align: right;
+                        font-size: 1.5rem;
+                        color: #0281a6;
+                        text-decoration: none;
+
+                        &:hover {
+                            cursor: pointer;
+                            color: #096e90;
+                        }
+                    }
+
+                    .input-passwort-container {
+                        display: flex;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+                        margin-bottom: 8px;
+                        align-items: center;
+                        .input-password {
+                            background-color: #fff;
+                            border: none;
+
+                            color: rgba(0, 0, 0, 0.84) !important;
+                            font-size: 1.4rem;
+                            caret-color: black;
+                            margin: 10px 0;
+                            outline: none;
+
+                            width: 100%;
+                        }
+                    }
+
                     .input-change {
                         background-color: #fff;
                         border: none;
@@ -52,6 +84,8 @@
                     color: #757575;
                     font-size: 1.4rem;
                     line-height: 2rem;
+                    display: flex;
+                    align-items: center;
                 }
             }
 

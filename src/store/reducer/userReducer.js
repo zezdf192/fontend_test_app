@@ -42,6 +42,12 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 userInfo: action.userInfo,
             }
+        case actionTypes.FETCH_USER_SIGNUP:
+            return {
+                ...state,
+                isLoggedIn: true,
+                userInfo: action.userInfo,
+            }
         default:
             return state
     }

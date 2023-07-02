@@ -146,8 +146,7 @@ function RatingsExam() {
     }
 
     let handleChooseExamItem = async (data) => {
-        ///console.log(examId)
-        let examID = data.data.examID
+        let examID = data._id
         if (examID) {
             navigate(`/ratings/${examID}`)
         }
@@ -228,7 +227,7 @@ function RatingsExam() {
             // console.log(listIndexRatings)
         }
     }
-
+    console.log(listUserDoExam)
     return (
         <>
             <HeaderHome />
@@ -250,7 +249,7 @@ function RatingsExam() {
                                                         return (
                                                             <ExamItem
                                                                 key={index}
-                                                                handleChooseExamItem={handleChooseExamItem}
+                                                                handleChooseExamItem={() => handleChooseExamItem(item)}
                                                                 data={item}
                                                             />
                                                         )
@@ -265,7 +264,6 @@ function RatingsExam() {
                                     interactive
                                     placement="bottom-start"
                                     onClickOutside={handleHideResult}
-                                    className="tippy-custom"
                                 >
                                     <div className="search">
                                         <input

@@ -71,7 +71,8 @@
         "description": "Description of the exam: ",
         "text": "Make sure you are in a quiet environment with a stable internet connection and minimize distractions. Good luck!",
         "back": "Go back homepage",
-        "start": "Start the exam"
+        "start": "Start the exam",
+        "like-count": "Like count: "
     },
     "result": {
         "exam-results": "Your exam results",
@@ -253,11 +254,50 @@
         "add-name": "Add your name",
         "cancel": "Cancel",
         "password": "Password",
-        "add-password": "Add password",
-        "email": "Email"
+        "new-password": "Entet the new password",
+        "confirm-password": "Confirm password",
+        "old-password": "Enter the old password",
+        "email": "Email",
+        "forgot-password": "Forgot password?"
     },
     "toast": {
         "update-success": "Update successful",
-        "update-fail": "Update failed"
+        "update-fail": "Update failed",
+        "incomplete-input": "Incomplete data input",
+        "not-correct": "Password confirmation does not match",
+        "err-password-long": "Password must be longer than or equal to 6 characters",
+        "incorrect-password": "Incorrect password entered",
+        "invalid": "Invalid data format",
+        "send-fail": "Send code failed",
+        "incorrect-code": "Incorrect code"
+    },
+    "not-found": {
+        "no-data": "Content not found",
+        "url-top": "The URL of this content has been changed or no longer exists",
+        "url-bottom": "If you have bookmarked this URL, please try accessing it from the homepage instead of using the saved URL",
+        "access-homepage": "Access the homepage",
+        "or-go-to": "or go to",
+        "login": "Login"
+    },
+    "favorite": {
+        "introduction": "Introduction",
+        "feature": "A feature that allows users to save their favorite exams",
+        "favorite-exams": "Favorite exams",
+        "no-exam": "You haven't liked any exams yet",
+        "view-more": "View more",
+        "here": "here"
+    },
+    "forgot-password": {
+        "forgot-password": "Forgot password",
+        "check-email": "Check your email to get the verification code",
+        "email": "Enter your email",
+        "code": "Enter the code",
+        "confirm": "Confirm",
+        "send-code": "Send code",
+        "resend-code": "Resend code",
+        "auto": "Automatically resend later ",
+        "s": "s",
+        "change-password": "Change password",
+        "new-password": "Enter a new password"
     }
 }

@@ -45,16 +45,27 @@ export const createNewUser = (data) => {
             console.log('create', data)
             let res = await userService.createNewUser(data)
             //console.log(res)
+            let buildData = {
+                email: data.email,
+                name: data.name,
+                password: true,
+                listLikeExam: [],
+                avatar: '',
+                roleID: 'R2',
+                userCreateID: [],
+                userExamID: [],
+            }
             if (res && res.errCode === 0) {
                 toast.success(res.message)
                 dispatch({
-                    type: actionTypes.USER_LOGIN_SUCCESS,
+                    type: actionTypes.FETCH_USER_SIGNUP,
+                    userInfo: buildData,
                 })
             } else {
-                // toast.error(res.message)
-                dispatch({
-                    type: actionTypes.USER_LOGIN_FAIL,
-                })
+                toast.error(res.message)
+                // dispatch({
+                //     type: actionTypes.USER_SIGNUP_FAIL,
+                // })
             }
             return res
         } catch (error) {
@@ -72,10 +83,15 @@ export const fetchUserLoginWithSocial = (data) => {
         try {
             let userInfo = {}
 
+            let resUSer = await userService.getDetailUser(data.email)
             let res = await userService.loginAppBySocial(data)
 
             if (res && res.errCode === 0) {
                 userInfo = res.data
+                if (resUSer && resUSer.errCode === 0) {
+                    userInfo = { ...userInfo, avatar: resUSer.data[0].avatar }
+                }
+                //console.log('userInfo', userInfo)
                 dispatch({
                     type: actionTypes.USER_LOGIN_WITH_SOCIAL_SUCCESS,
                     userInfo: userInfo,

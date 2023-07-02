@@ -18,6 +18,7 @@ import ImgAvatar from '../../../component/ImgAvatar/ImgAvatar'
 import ButtonNotify from '../../../component/ButtonNotify/ButtonNotify'
 import WrapperPoper from '../../User/Ratings/WrapperPoper/WrapperPoper'
 import UserMenu from './UserMenu/UserMenu'
+import nonAvatar from '../../../styles/svg/avatar.jpg'
 
 function HeaderHome() {
     const { t } = useTranslation()
@@ -96,13 +97,16 @@ function HeaderHome() {
                                         interactive
                                         placement="bottom-start"
                                         onClickOutside={handleHideResult}
-                                        className="tippy-custom"
                                     >
                                         <div className="avatar-user">
                                             <ImgAvatar
                                                 onClick={onClickAvatar}
                                                 alt="no-img"
-                                                src={user && user.userInfo && user.userInfo.avatar}
+                                                src={
+                                                    user && user.userInfo && user.userInfo.avatar
+                                                        ? user.userInfo.avatar
+                                                        : nonAvatar
+                                                }
                                             />
                                         </div>
                                     </Tippy>

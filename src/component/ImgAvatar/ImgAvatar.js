@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react'
 import nonAvatar from '../../styles/svg/avatar.jpg'
 import ButtonNotify from '../ButtonNotify/ButtonNotify'
 import { useTranslation } from 'react-i18next'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCamera } from '@fortawesome/free-solid-svg-icons'
 
-function ImgAvatar({ src, alt, width, onClick }) {
+function ImgAvatar({ src, alt, style, onClick, showChange, styleParent }) {
     const { t } = useTranslation()
-    const [srcImg, setSrcImg] = useState()
+    const [srcImg, setSrcImg] = useState(src)
 
     useEffect(() => {
         if (!src) {
@@ -17,7 +19,12 @@ function ImgAvatar({ src, alt, width, onClick }) {
     }, [src])
 
     return (
-        <img className="img-contant" style={{ width: width, height: width }} onClick={onClick} src={srcImg} alt={alt} />
+        <div className="img-contantner" onClick={onClick} style={styleParent}>
+            <div className="icon-change" style={showChange ? style : { ...style, backgroundColor: 'transparent' }}>
+                {showChange && <FontAwesomeIcon className="icon-change-camera" icon={faCamera} />}
+            </div>
+            <img className="img-contant" style={style} src={srcImg} alt={alt} />
+        </div>
     )
 }
 

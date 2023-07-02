@@ -12,7 +12,10 @@ export const path = {
     startExam: '/exam/:examId',
     resultExam: '/result/:examId',
     myExam: '/myExam',
+    myLoveExam: '/favorite',
     myDoExam: '/mydoExam',
     ratings: '/ratings/:examId',
     setting: '/settings/personal',
+    forgotPassword: "/forgot/password",
+    notFound: '/404',
 }

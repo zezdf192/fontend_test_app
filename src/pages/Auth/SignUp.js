@@ -5,13 +5,14 @@ import 'firebase/compat/auth'
 import FirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { path } from '../../until/constant'
 import './SignUp.scss'
 import vietnamese from '../../styles/icon/vietnam.jpg'
 import america from '../../styles/icon/america.jpg'
 import facebook from '../../styles/icon/facebook.png'
 import google from '../../styles/icon/google.png'
+import { useNavigate } from 'react-router-dom'
 
 import { createNewUser, fetchUserLoginWithSocial } from '../../store/action/userAction'
 import { changeLanguage } from '../../store/action/appAction'
@@ -22,6 +23,7 @@ function SignUp() {
     const language = useSelector((state) => state.app.language)
     const user = useSelector((state) => state.user)
     const dispatch = useDispatch()
+    let navigate = useNavigate()
 
     //init state
     const [email, setEmail] = useState('')
@@ -119,12 +121,14 @@ function SignUp() {
     const handleSignUp = async () => {
         let valid = handleValidate()
         if (valid.isCheck) {
-            console.log(valid)
+            //console.log(valid)
             let respon = await dispatch(createNewUser(valid.data))
-            console.log(respon)
+            //console.log(respon)
             if (respon.errCode === 2) {
                 setErrEmail(respon.message)
             }
+
+            navigate('/')
         }
         //console.log({ email, name, password, repeatPassword, address, gender, roleID })
     }

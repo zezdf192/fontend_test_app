@@ -29,10 +29,13 @@ function Login({ history }) {
     const [errPassword, setErrPassword] = useState('')
 
     const handleLoginSuccess = async (authResult) => {
-        console.log(authResult)
+        // console.log(authResult)
         const { user } = authResult
+        await dispatch(fetchUserLoginWithSocial(user))
 
-        dispatch(fetchUserLoginWithSocial(user))
+        if (user) {
+            navigate('/')
+        }
     }
 
     const uiConfig = {
@@ -45,7 +48,7 @@ function Login({ history }) {
         callbacks: {
             signInSuccessWithAuthResult: (authResult) => {
                 handleLoginSuccess(authResult)
-                return true
+                return false
             },
         },
     }

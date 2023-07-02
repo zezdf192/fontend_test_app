@@ -7,6 +7,12 @@ import userService from '../../../../service/userService'
 import './GroupField.scss'
 import { fetchUpdateUser } from '../../../../store/action/userAction'
 
+import ImgChange from './ImgChange/ImgChange'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons'
+import { Link } from 'react-router-dom'
+import { path } from '../../../../until/constant'
+
 function GroupField() {
     const { t } = useTranslation()
     const user = useSelector((state) => state.user)
@@ -19,16 +25,30 @@ function GroupField() {
     const [isEditAvatar, setIsEditAvatar] = useState(false)
 
     const [name, setName] = useState()
+    const [currentPassword, setCurrentPassword] = useState()
     const [password, setPassword] = useState()
+    const [oldPassword, setOldPassword] = useState()
+    const [repeatPassword, setRepeatPassword] = useState()
+
+    const [file, setFile] = useState(null)
+    const [currentFile, setCurrentFile] = useState(null)
+
+    //state manage show password
+    // const [isOldPassword, setIsOldPassword] = useState(false)
+    // const [isNewPassWord, setIsNewPassWord] = useState(false)
+    // const [isRepeatPassword, setIsRepeatPassword] = useState(false)
 
     const nameRef = useRef()
+    const oldPasswordRef = useRef()
 
     useEffect(() => {
         setName(user.userInfo.name)
+        user.userInfo.avatar ? setFile(user.userInfo.avatar) : setFile(null)
+        user.userInfo.avatar ? setCurrentFile(user.userInfo.avatar) : setCurrentFile(null)
         if (!user.userInfo.password) {
-            setPassword(null)
+            setCurrentPassword(null)
         } else {
-            setPassword(user.userInfo.password)
+            setCurrentPassword(user.userInfo.password)
         }
     }, [])
 
@@ -72,6 +92,80 @@ function GroupField() {
         }
     }
 
+    //avatar
+    let handleEditAvatar = () => {
+        //console.log(123)
+        setIsEditAvatar(true)
+    }
+
+    let handleCancleAvatar = () => {
+        setIsEditAvatar(false)
+        setFile(null)
+    }
+
+    let handleSaveAvatar = async () => {
+        setIsEditAvatar(false)
+        //console.log(file)
+        if (file !== currentFile) {
+            let res = await userService.updateUserByEmail({ email: user.userInfo.email, payload: file, key: 'avatar' })
+
+            if (res && res.errCode === 0) {
+                let data = { ...user.userInfo, avatar: file }
+
+                toast.success(t('toast.update-success'))
+                dispatch(fetchUpdateUser(data))
+            } else {
+                toast.error(t('toast.update-fail'))
+            }
+        }
+    }
+
+    let handleChangeFile = (data) => {
+        setFile(data)
+    }
+
+    let handleCanclePassword = () => {
+        setOldPassword('')
+        setPassword('')
+        setRepeatPassword('')
+        setIsEditPassword(false)
+    }
+
+    let handleSavePassword = async () => {
+        if (!oldPassword || !password || !repeatPassword) {
+            toast.error(t('toast.incomplete-input'))
+        } else if (password.length < 6) {
+            toast.error(t('toast.err-password-long'))
+        } else if (password !== repeatPassword) {
+            toast.error(t('toast.not-correct'))
+        } else {
+            let res = await userService.editPassword({
+                email: user.userInfo.email,
+                oldPassword,
+                password,
+            })
+
+            if (res && res.errCode === 0) {
+                toast.success(t('toast.update-success'))
+                setIsEditPassword(false)
+            } else if (res && res.errCode === 3) {
+                toast.error(t('toast.incorrect-password'))
+            } else {
+                toast.error(t('toast.update-fail'))
+            }
+        }
+    }
+
+    // let hanldeShowPassword = () => {
+    //     oldPasswordRef.current.type = 'text'
+    //     setIsOldPassword(false)
+    // }
+
+    // let hanldeHidePassword = () => {
+    //     oldPasswordRef.current.type = 'password'
+    //     setIsOldPassword(true)
+    // }
+
     return (
         <>
             <div className="group-field-container">
@@ -86,8 +180,8 @@ function GroupField() {
                                 <input
                                     ref={nameRef}
                                     type="text"
-                                    maxlength="50"
-                                    placeholder="Thêm tên của bạn"
+                                    maxLength="50"
+                                    placeholder={t('detail-user.add-name')}
                                     className="input-change"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
@@ -119,23 +213,105 @@ function GroupField() {
                             <div className="infor-container">
                                 <span className="sub-title">{t('detail-user.avatar')}</span>
                             </div>
-                            <div className="description">{t('detail-user.image')}</div>
-                        </div>
-                        <div className="content-left">
-                            <button className="design"> {t('detail-user.edit')}</button>
-                        </div>
-                    </div>
-
-                    <div className="group-field-item">
-                        <div className="content-right">
-                            <div className="infor-container">
-                                <span className="sub-title">{t('detail-user.password')}</span>
+                            <div className="description">
+                                <span> {t('detail-user.image')}</span>
+                                <ImgChange
+                                    handleEditAvatar={handleEditAvatar}
+                                    isEditAvatar={isEditAvatar}
+                                    handleChangeFile={handleChangeFile}
+                                    file={file}
+                                />
                             </div>
                         </div>
                         <div className="content-left">
-                            <button className="design"> {t('detail-user.edit')}</button>
+                            {isEditAvatar ? (
+                                <>
+                                    <button onClick={handleSaveAvatar} className="design active">
+                                        {t('detail-user.save')}
+                                    </button>
+                                    <button onClick={handleCancleAvatar} className="design">
+                                        {t('detail-user.cancel')}
+                                    </button>
+                                </>
+                            ) : (
+                                <button onClick={handleEditAvatar} className="design">
+                                    {t('detail-user.edit')}
+                                </button>
+                            )}
                         </div>
                     </div>
+                    {currentPassword !== null ? (
+                        <div className="group-field-item">
+                            <div className="content-right">
+                                <div className="infor-container">
+                                    <span className="sub-title">{t('detail-user.password')}</span>
+                                    {isEditPassword ? (
+                                        <>
+                                            <div className="input-passwort-container">
+                                                <input
+                                                    ref={oldPasswordRef}
+                                                    type="password"
+                                                    maxLength="50"
+                                                    placeholder={t('detail-user.old-password')}
+                                                    className="input-password"
+                                                    value={oldPassword}
+                                                    onChange={(e) => setOldPassword(e.target.value)}
+                                                />
+                                                {/* {isOldPassword ? (
+                                                    <FontAwesomeIcon onClick={hanldeShowPassword} icon={faEye} />
+                                                ) : (
+                                                    <FontAwesomeIcon onClick={hanldeHidePassword} icon={faEyeSlash} />
+                                                )} */}
+                                            </div>
+                                            <div className="input-passwort-container">
+                                                <input
+                                                    type="password"
+                                                    maxLength="50"
+                                                    placeholder={t('detail-user.new-password')}
+                                                    className="input-password"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="input-passwort-container">
+                                                <input
+                                                    type="password"
+                                                    maxLength="50"
+                                                    placeholder={t('detail-user.confirm-password')}
+                                                    className="input-password"
+                                                    value={repeatPassword}
+                                                    onChange={(e) => setRepeatPassword(e.target.value)}
+                                                />
+                                            </div>
+                                            <Link to={path.forgotPassword} className="forgot-password">
+                                                {t('detail-user.forgot-password')}
+                                            </Link>
+                                        </>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="content-left">
+                                {isEditPassword ? (
+                                    <>
+                                        <button onClick={handleSavePassword} className="design active">
+                                            {t('detail-user.save')}
+                                        </button>
+                                        <button onClick={handleCanclePassword} className="design">
+                                            {t('detail-user.cancel')}
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button onClick={() => setIsEditPassword(true)} className="design">
+                                        {t('detail-user.edit')}
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
 
                     <div className="group-field-item">
                         <div className="content-right">
@@ -144,10 +320,10 @@ function GroupField() {
                                 <input
                                     type="text"
                                     name="full-name"
-                                    maxlength="50"
+                                    maxLength="50"
                                     placeholder="Thêm tên của bạn"
                                     className="input-change"
-                                    value="asdll;of"
+                                    value={user.userInfo.email}
                                     disable
                                 />
                             </div>

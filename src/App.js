@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -26,6 +27,9 @@ import RatingsExam from './pages/User/Ratings/RatingsExam/RatingsExam'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import DetailUser from './pages/User/DetailUser/Setting'
+import NotFound from './pages/NotFound/NotFound'
+import MyLoveExam from './pages/User/MyLoveExam/MyLoveExam'
+import ForgotPassword from './pages/User/ForgotPassword/ForgotPassword'
 
 const config = {
     apiKey: 'AIzaSyCH9GOIU2oMBdWwXlTNQ7W1FKmR1Lns-Ic',
@@ -76,10 +80,16 @@ function App() {
                         <Route exact path={path.startExam} element={<StartExam />}></Route>
                         <Route exact path={path.resultExam} element={<ResultExam />}></Route>
                         <Route exact path={path.myExam} element={<MyExam />}></Route>
+                        <Route exact path={path.myLoveExam} element={<MyLoveExam />}></Route>
                         <Route exact path={path.myDoExam} element={<MyDoExam />}></Route>
 
                         {/* ratings */}
                         <Route exact path={path.ratings} element={<RatingsExam />}></Route>
+
+                        {/* not found */}
+                        <Route path={path.forgotPassword} element={<ForgotPassword />} />
+
+                        <Route path="/*" element={<NotFound />} />
                     </Routes>
                     <ToastContainer
                         position="top-right"

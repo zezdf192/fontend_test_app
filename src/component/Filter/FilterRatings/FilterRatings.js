@@ -207,8 +207,8 @@ const FilterRatings = ({ isMyRatings, examID, isOpenFilter, showModal, children,
                     </Form.Item>
                     <Form.Item label={t('filter-exam.sort-leaderboard')}>
                         <Select defaultValue="greater" style={{ minWidth: '472px' }} onChange={handleChangeRatings}>
-                            <Option value="greater">{t('filter-exam.ascending')}</Option>
                             <Option value="less">{t('filter-exam.decrease')}</Option>
+                            <Option value="greater">{t('filter-exam.ascending')}</Option>
                         </Select>
                     </Form.Item>
 
