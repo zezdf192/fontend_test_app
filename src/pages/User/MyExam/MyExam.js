@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-
+import ReactPaginate from 'react-paginate'
 import { useTranslation } from 'react-i18next'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -23,7 +23,7 @@ import HeaderHome from '../../HomePage/HeaderHome/HeaderHome'
 import Button from '../../../component/ButtonNotify/ButtonNotify'
 import './MyExam.scss'
 import { path } from '../../../until/constant'
-
+import imgNoData from '../../../styles/svg/no-data.png'
 import examService from '../../../service/examService'
 import { sideBarUser } from '../../../component/RouteSideBar/routeSideBar'
 import SideBar from './SideBar/SideBar'
@@ -41,7 +41,7 @@ function MyExam() {
     //filter
     const [isOpenFilter, setIsOpenFilter] = useState(false)
     const [dataSearch, setDataSearch] = useState({
-        userID: user.userInfo._id,
+        email: user.userInfo.email,
         nameExam: '',
         currentJoin: null,
         typeCurrentJoin: 'greater',
@@ -52,6 +52,11 @@ function MyExam() {
         dayStart: null,
         dayEnd: null,
     })
+
+    const [currentPage, setCurrentPage] = useState(0)
+    const [itemsPerPage, setItemsPerPage] = useState(5)
+    const [newListExam, setNewListExam] = useState([])
+
     //exam
     const [listExam, setListExam] = useState([])
     const [fieldSort, setFieldSort] = useState('title')
@@ -81,7 +86,7 @@ function MyExam() {
     ])
 
     let callAPI = async () => {
-        let respon = await examService.getAllExamByUserId({ userID: user.userInfo._id })
+        let respon = await examService.getAllExamByUserId({ email: user.userInfo.email })
 
         if (respon && respon.errCode === 0) {
             //console.log(respon.data)
@@ -107,7 +112,7 @@ function MyExam() {
         setArrayTableTitles(copyArrayTableTitles)
 
         let respon = await examService.sortExamByType({
-            userID: user && user.userInfo && user.userInfo._id,
+            email: user && user.userInfo && user.userInfo.email,
             type: type,
             typeSort: arrayTableTitles[index].status,
             dataSearch: dataSearch,
@@ -204,6 +209,20 @@ function MyExam() {
         }
     }
 
+    let handlePageChange = (selectedPage) => {
+        //console.log(selectedPage)
+        setCurrentPage(selectedPage.selected)
+        // Thực hiện các tác vụ cần thiết khi chuyển trang
+    }
+
+    useEffect(() => {
+        let slicedData =
+            listExam &&
+            listExam.length > 0 &&
+            listExam.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+        setNewListExam(slicedData)
+    }, [listExam, currentPage])
+
     return (
         <>
             <HeaderHome />
@@ -214,122 +233,151 @@ function MyExam() {
                     <div className="manage-body">
                         <h2 className="title">{t('content-your-exam.compilation-exams-participated')}</h2>
 
-                        {listExam && listExam.length > 0 && (
-                            <>
-                                <div className="header-exam">
-                                    <Link to={path.createExam} className="add-exam">
-                                        {t('content-your-exam.add-exam')}
-                                    </Link>
-                                    <div className="filter">
-                                        <FilterExam
-                                            isOpenFilter={isOpenFilter}
-                                            updateListDoExam={updateListDoExam}
-                                            showModal={showModalFilter}
-                                            changeDataSearch={changeDataSearch}
-                                            children={
-                                                <span className="search">{t('content-your-exam.filter-exam')}</span>
-                                            }
-                                        />
-                                    </div>
+                        <>
+                            <div className="header-exam">
+                                <Link to={path.createExam} className="add-exam">
+                                    {t('content-your-exam.add-exam')}
+                                </Link>
+                                <div className="filter">
+                                    <FilterExam
+                                        isOpenFilter={isOpenFilter}
+                                        updateListDoExam={updateListDoExam}
+                                        showModal={showModalFilter}
+                                        changeDataSearch={changeDataSearch}
+                                        children={<span className="search">{t('content-your-exam.filter-exam')}</span>}
+                                    />
                                 </div>
-                                <div className="table-container">
-                                    <div className="table-head">
-                                        <table>
-                                            <thead>
-                                                <tr className="table-header">
-                                                    <th className="px-5">STT</th>
-                                                    {arrayTableTitles &&
-                                                        arrayTableTitles.length > 0 &&
-                                                        arrayTableTitles.map((item, index) => {
+                            </div>
+                            {newListExam && newListExam.length > 0 ? (
+                                <>
+                                    <div className="table-container">
+                                        <div className="table-head">
+                                            <table>
+                                                <thead>
+                                                    <tr className="table-header">
+                                                        <th className="px-5">STT</th>
+                                                        {arrayTableTitles &&
+                                                            arrayTableTitles.length > 0 &&
+                                                            arrayTableTitles.map((item, index) => {
+                                                                return (
+                                                                    <th
+                                                                        key={index}
+                                                                        onClick={() => {
+                                                                            handleSortByField(item.key, index)
+                                                                            handleDisPlayTypeSort(item.key, item.status)
+                                                                        }}
+                                                                    >
+                                                                        {t(item.value)}
+                                                                        {fieldSort === item.key && iconSort}
+                                                                    </th>
+                                                                )
+                                                            })}
+
+                                                        <th>{t('content-your-exam.password')}</th>
+                                                        <th>{t('content-your-exam.type-exam')}</th>
+                                                        <th>{t('content-your-exam.action')}</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+
+                                        <div className="table-body">
+                                            <table>
+                                                <tbody>
+                                                    {newListExam &&
+                                                        newListExam.length > 0 &&
+                                                        newListExam.map((item, index) => {
                                                             return (
-                                                                <th
-                                                                    key={index}
-                                                                    onClick={() => {
-                                                                        handleSortByField(item.key, index)
-                                                                        handleDisPlayTypeSort(item.key, item.status)
-                                                                    }}
-                                                                >
-                                                                    {t(item.value)}
-                                                                    {fieldSort === item.key && iconSort}
-                                                                </th>
+                                                                <tr key={index}>
+                                                                    <td className="px-5">{index + 1}</td>
+                                                                    <td>{item.data.title}</td>
+                                                                    <td>{item.data.quantityJoin}</td>
+
+                                                                    <td
+                                                                        className={
+                                                                            hidden[index] ? 'hidden-password' : ''
+                                                                        }
+                                                                        onDoubleClick={() => handleShowPassword(index)}
+                                                                    >
+                                                                        <Button
+                                                                            descrip={t('tippy.double-click')}
+                                                                            children={<span>{item.data.password}</span>}
+                                                                        />
+                                                                    </td>
+                                                                    <td>{buildEJSTypeExam(item.data.typeExam)}</td>
+                                                                    <td className="action">
+                                                                        <Button
+                                                                            descrip={t('tippy.detail-exam')}
+                                                                            children={
+                                                                                <button
+                                                                                    className="btn-view"
+                                                                                    onClick={() =>
+                                                                                        handleViewDetail(item)
+                                                                                    }
+                                                                                >
+                                                                                    <FontAwesomeIcon icon={faEye} />
+                                                                                </button>
+                                                                            }
+                                                                        />
+                                                                        <Button
+                                                                            descrip={t('tippy.edit-exam')}
+                                                                            children={
+                                                                                <button
+                                                                                    className="btn-edit"
+                                                                                    onClick={() => handleEdit(item)}
+                                                                                >
+                                                                                    <FontAwesomeIcon icon={faPencil} />
+                                                                                </button>
+                                                                            }
+                                                                        />
+
+                                                                        <Button
+                                                                            descrip={t('tippy.remove-exam')}
+                                                                            children={
+                                                                                <button
+                                                                                    className="btn-delete"
+                                                                                    onClick={() => handleDelete(item)}
+                                                                                >
+                                                                                    <FontAwesomeIcon icon={faTrash} />
+                                                                                </button>
+                                                                            }
+                                                                        />
+                                                                    </td>
+                                                                </tr>
                                                             )
                                                         })}
-
-                                                    <th>{t('content-your-exam.password')}</th>
-                                                    <th>{t('content-your-exam.type-exam')}</th>
-                                                    <th>{t('content-your-exam.action')}</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <ReactPaginate
+                                            previousLabel={currentPage === 0 ? null : t('admin.previous')}
+                                            nextLabel={
+                                                currentPage === Math.ceil(listExam.length / itemsPerPage) - 1
+                                                    ? null
+                                                    : t('admin.next')
+                                            }
+                                            breakLabel={'...'}
+                                            breakClassName={'break-me'}
+                                            pageCount={Math.ceil(listExam.length / itemsPerPage)} // Tổng số trang
+                                            marginPagesDisplayed={2}
+                                            pageRangeDisplayed={5}
+                                            onPageChange={handlePageChange}
+                                            containerClassName={'pagination'}
+                                            activeClassName={'active'}
+                                        />
                                     </div>
-
-                                    <div className="table-body">
-                                        <table>
-                                            <tbody>
-                                                {listExam &&
-                                                    listExam.length > 0 &&
-                                                    listExam.map((item, index) => {
-                                                        return (
-                                                            <tr key={index}>
-                                                                <td className="px-5">{index + 1}</td>
-                                                                <td>{item.data.title}</td>
-                                                                <td>{item.data.quantityJoin}</td>
-
-                                                                <td
-                                                                    className={hidden[index] ? 'hidden-password' : ''}
-                                                                    onDoubleClick={() => handleShowPassword(index)}
-                                                                >
-                                                                    <Button
-                                                                        descrip={t('tippy.double-click')}
-                                                                        children={<span>{item.data.password}</span>}
-                                                                    />
-                                                                </td>
-                                                                <td>{buildEJSTypeExam(item.data.typeExam)}</td>
-                                                                <td className="action">
-                                                                    <Button
-                                                                        descrip={t('tippy.detail-exam')}
-                                                                        children={
-                                                                            <button
-                                                                                className="btn-view"
-                                                                                onClick={() => handleViewDetail(item)}
-                                                                            >
-                                                                                <FontAwesomeIcon icon={faEye} />
-                                                                            </button>
-                                                                        }
-                                                                    />
-                                                                    <Button
-                                                                        descrip={t('tippy.edit-exam')}
-                                                                        children={
-                                                                            <button
-                                                                                className="btn-edit"
-                                                                                onClick={() => handleEdit(item)}
-                                                                            >
-                                                                                <FontAwesomeIcon icon={faPencil} />
-                                                                            </button>
-                                                                        }
-                                                                    />
-
-                                                                    <Button
-                                                                        descrip={t('tippy.remove-exam')}
-                                                                        children={
-                                                                            <button
-                                                                                className="btn-delete"
-                                                                                onClick={() => handleDelete(item)}
-                                                                            >
-                                                                                <FontAwesomeIcon icon={faTrash} />
-                                                                            </button>
-                                                                        }
-                                                                    />
-                                                                </td>
-                                                            </tr>
-                                                        )
-                                                    })}
-                                            </tbody>
-                                        </table>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="img-nodata-container">
+                                        <div className="img-nodata-body">
+                                            <img src={imgNoData} alt="" />
+                                            <span>{t('not-found.no-data')}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </>
-                        )}
+                                </>
+                            )}
+                        </>
                     </div>
                 </div>
             </div>

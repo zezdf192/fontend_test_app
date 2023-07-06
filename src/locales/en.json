@@ -13,7 +13,9 @@
         "exam-duration": "Exam duration",
         "total-exams-created": "Total exams created",
         "total-exams-administered": "Total exams administered",
-        "close": "Close"
+        "close": "Close",
+        "previous": "Previous",
+        "next": "Next"
     },
     "log-in": {
         "register": "Register",
@@ -72,9 +74,12 @@
         "text": "Make sure you are in a quiet environment with a stable internet connection and minimize distractions. Good luck!",
         "back": "Go back homepage",
         "start": "Start the exam",
-        "like-count": "Like count: "
+        "like-count": "Like count: ",
+        "note": "Your work information will not be saved if you are not logged in"
     },
     "result": {
+        "homepage": "Homepage",
+        "retake-exam": "Retake the exam",
         "exam-results": "Your exam results",
         "score": "Score",
         "time": "Time",
@@ -144,6 +149,13 @@
         "confirm": "Confirm",
         "success": "Filter success",
         "fail": "Filter failure",
+        "enter-data": "Enter data",
+        "name": "Name",
+        "enter-name": "Enter the name",
+        "exam-code": "Exam Code",
+        "code": "Code",
+        "enter-email": "Enter the email",
+        "email": "Email",
         "toast-no-future": "This feature is not applicable to your ranking table. You can click on the sorting icon to sort the data"
     },
     "filter-exam": {
@@ -269,7 +281,9 @@
         "incorrect-password": "Incorrect password entered",
         "invalid": "Invalid data format",
         "send-fail": "Send code failed",
-        "incorrect-code": "Incorrect code"
+        "incorrect-code": "Incorrect code",
+        "exam-code-not-exist": "The exam code does not exist",
+        "server-error": "Server error, please try again later"
     },
     "not-found": {
         "no-data": "Content not found",

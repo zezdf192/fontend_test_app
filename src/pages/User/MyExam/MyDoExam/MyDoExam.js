@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import LoadingOverlay from 'react-loading-overlay'
 import BeatLoader from 'react-spinners/BeatLoader'
-
+import ReactPaginate from 'react-paginate'
 import './MyDoExam.scss'
 import filter from '../../../../styles/icon/filter.png'
 
@@ -34,6 +34,10 @@ function MyDoExam() {
     const language = useSelector((state) => state.app.language)
     let navigate = useNavigate()
     const user = useSelector((state) => state.user)
+
+    const [currentPage, setCurrentPage] = useState(0)
+    const [itemsPerPage, setItemsPerPage] = useState(5)
+    const [newListExam, setNewListExam] = useState([])
 
     //state
     const [isLoading, setIsLoading] = useState(false)
@@ -78,7 +82,7 @@ function MyDoExam() {
     let callAPI = async () => {
         setIsLoading(true)
 
-        let respon = await examService.getAllDoExamByUserId({ userID: user.userInfo._id })
+        let respon = await examService.getAllDoExamByUserId({ email: user.userInfo.email })
 
         if (respon && respon.errCode === 0) {
             setListDoExam(respon.data)
@@ -107,7 +111,11 @@ function MyDoExam() {
     }
 
     let handleStartDoExam = (data) => {
-        navigate(`/verification/${data.data.examID}`)
+        if (user.userInfo) {
+            navigate(`/verification/${user.userInfo.email}/${user.userInfo.name}/${data.data.examID}`)
+        } else {
+            navigate(`/verification/undefine/undefine/${data.data.examID}`)
+        }
     }
 
     let updateListDoExam = (data) => {
@@ -159,6 +167,20 @@ function MyDoExam() {
     }
 
     //console.log(listDoExam)
+
+    let handlePageChange = (selectedPage) => {
+        //console.log(selectedPage)
+        setCurrentPage(selectedPage.selected)
+        // Thực hiện các tác vụ cần thiết khi chuyển trang
+    }
+
+    useEffect(() => {
+        let slicedData =
+            listDoExam &&
+            listDoExam.length > 0 &&
+            listDoExam.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+        setNewListExam(slicedData)
+    }, [listDoExam, currentPage])
 
     return (
         <>
@@ -231,9 +253,9 @@ function MyDoExam() {
                                     <div className="table-body">
                                         <table>
                                             <tbody>
-                                                {listDoExam &&
-                                                    listDoExam.length > 0 &&
-                                                    listDoExam.map((item, index) => {
+                                                {newListExam &&
+                                                    newListExam.length > 0 &&
+                                                    newListExam.map((item, index) => {
                                                         return (
                                                             <tr key={index}>
                                                                 <td className="px-5">{index + 1}</td>
@@ -258,23 +280,28 @@ function MyDoExam() {
                                                                             </button>
                                                                         }
                                                                     />
-
-                                                                    <Button
-                                                                        descrip={t('tippy.start-exam')}
-                                                                        children={
-                                                                            <button
-                                                                                className="btn-view"
-                                                                                notifi="Tới bài thi"
-                                                                                onClick={() => handleStartDoExam(item)}
-                                                                            >
-                                                                                {' '}
-                                                                                <FontAwesomeIcon
-                                                                                    className="btn-edit"
-                                                                                    icon={faPlay}
-                                                                                />
-                                                                            </button>
-                                                                        }
-                                                                    />
+                                                                    {item.data.typeExam === 'PUBLIC' ? (
+                                                                        <Button
+                                                                            descrip={t('tippy.start-exam')}
+                                                                            children={
+                                                                                <button
+                                                                                    className="btn-view"
+                                                                                    notifi="Tới bài thi"
+                                                                                    onClick={() =>
+                                                                                        handleStartDoExam(item)
+                                                                                    }
+                                                                                >
+                                                                                    {' '}
+                                                                                    <FontAwesomeIcon
+                                                                                        className="btn-edit"
+                                                                                        icon={faPlay}
+                                                                                    />
+                                                                                </button>
+                                                                            }
+                                                                        />
+                                                                    ) : (
+                                                                        <></>
+                                                                    )}
                                                                 </td>
                                                             </tr>
                                                         )
@@ -282,6 +309,22 @@ function MyDoExam() {
                                             </tbody>
                                         </table>
                                     </div>
+                                    <ReactPaginate
+                                        previousLabel={currentPage === 0 ? null : t('admin.previous')}
+                                        nextLabel={
+                                            currentPage === Math.ceil(listDoExam.length / itemsPerPage) - 1
+                                                ? null
+                                                : t('admin.next')
+                                        }
+                                        breakLabel={'...'}
+                                        breakClassName={'break-me'}
+                                        pageCount={Math.ceil(listDoExam.length / itemsPerPage)} // Tổng số trang
+                                        marginPagesDisplayed={2}
+                                        pageRangeDisplayed={5}
+                                        onPageChange={handlePageChange}
+                                        containerClassName={'pagination'}
+                                        activeClassName={'active'}
+                                    />
                                 </div>
                             </>
                         )}
@@ -289,10 +332,11 @@ function MyDoExam() {
                 </div>
                 {isOpenModalDetail && (
                     <ModalDetailUser
-                        data={currentUser}
+                        data={currentUser && currentUser.exam}
                         isOpenModal={isOpenModalDetail}
                         handleCloseModalDetail={handleCloseModalDetail}
                         type="doExam"
+                        ratings
                     />
                 )}
             </div>

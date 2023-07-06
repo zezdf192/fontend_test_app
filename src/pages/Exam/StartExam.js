@@ -13,7 +13,7 @@ import ModalExam from './ModalExam/ModalExam'
 
 function StartExam() {
     const language = useSelector((state) => state.app.language)
-    const { examId } = useParams()
+    const { examId, email, nameUser } = useParams()
     let navigate = useNavigate()
     const [exam, setExam] = useState()
     const user = useSelector((state) => state.user)
@@ -35,15 +35,22 @@ function StartExam() {
     const [typeModal, setTypeModal] = useState('submit')
 
     let callAPI = async () => {
-        let respon = await examService.getDetailExamById(examId)
+        //let respon = await examService.getDetailExamById(examId)
+        let respon = await examService.getDetailExamPrivateForVerify({
+            examId,
+            email,
+            nameUser,
+        })
 
         if (respon && respon.errCode === 0) {
-            setExamInfo(respon.data.exam)
-            setQuestionId(respon.data.exam.data.questions[0])
+            setExamInfo(respon.data.examRamdom)
+            setQuestionId(respon.data.examRamdom.data.questions[0])
             setListAnswerChoose(new Array(respon.data.exam.data.questions.length).fill(null))
             let length = respon.data.exam.data.questions.length
             let arr = Array(length)
             setMyAnswer(arr)
+        } else if (respon && respon.errCode === 1) {
+            navigate('/404')
         }
     }
 
@@ -141,6 +148,18 @@ function StartExam() {
         return result
     }
 
+    function taoChuoiNgauNhien(length) {
+        let code = ''
+        let string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+        for (var i = 0; i < length; i++) {
+            var viTriNgauNhien = Math.floor(Math.random() * string.length)
+            code += string.charAt(viTriNgauNhien)
+        }
+
+        return code
+    }
+
     let handleSubmitModal = async () => {
         let questionBE = examInfo.data.questions
 
@@ -199,14 +218,14 @@ function StartExam() {
         newDate.setHours(23, 59, 59, 0)
 
         let data = {
-            userID: user.userInfo._id,
+            //userID: user.userInfo._id,
             timeEn: handleTimeDoExam('en'),
             currentTimeEn: handleTimeDoExam('en'),
             timeVi: handleTimeDoExam('vi'),
             currentTimeVi: handleTimeDoExam('vi'),
             answers: myAnswer,
             examID: examId,
-            nameUser: user.userInfo.name,
+            nameUser: nameUser,
             nameExam: examInfo.data.title,
             quantityQuestion: examInfo.data.questions.length,
             scoreExam: examInfo.data.score.valueNum,
@@ -220,16 +239,30 @@ function StartExam() {
             //valueTimeDoExamGreatest: Math.floor(timeDoExam),
             dateDoExam: newDate,
             //dateDoExamLast: newDate,
-            email: user.userInfo.email,
+            email: email,
+            typeExam: examInfo.data.typeExam,
         }
 
-        let respon = await examService.studentDoExam(data)
+        let codeCopy = taoChuoiNgauNhien(20)
+        // examId, email, nameUser
 
-        if (respon && respon.errCode === 0) {
-            console.log(respon.message)
+        if (user & user.userInfo) {
+            let respon = await examService.studentDoExam(data)
+        } else if (email !== 'undefine' && nameUser !== 'undefine') {
+            await examService.studentDoExam(data)
         }
 
-        navigate(`/result/${examId}`)
+        await examService.createCopyScoreBelongToUser({ examInfo, userAnswer: myAnswer, code: codeCopy, data })
+
+        // if (respon && respon.errCode === 0) {
+        //     console.log(respon.message)
+        // }
+
+        if (email !== 'undefine' && nameUser !== 'undefine') {
+            navigate(`/result/${email}/${nameUser}/${examId}/${codeCopy}`)
+        } else {
+            navigate(`/result/undefine/undefine/${examId}/${codeCopy}`)
+        }
 
         //console.log(data)
         setDescriptionModal('')

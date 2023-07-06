@@ -13,13 +13,9 @@ function ModalDetailUser({ handleCloseModalDetail, isOpenModal, data, type, rati
     const language = useSelector((state) => state.app.language)
     const [currentUser, setCurrentUser] = useState()
     const [hidden, setHidden] = useState(false)
-
+    console.log(data)
     useEffect(() => {
-        if (type === 'doExam') {
-            setCurrentUser(data && data.exam)
-        } else {
-            setCurrentUser(data)
-        }
+        setCurrentUser(data)
     }, [data])
 
     let convertTime = (string) => {
@@ -113,21 +109,25 @@ function ModalDetailUser({ handleCloseModalDetail, isOpenModal, data, type, rati
                             {currentUser && currentUser.data && currentUser.data.title}
                         </span>
                     </div>
-                    <div className="col-12">
-                        <span className="detail-title">{t('modal.exam-password')}</span>
-                        <span>:</span>
-                        <ButtonNotify
-                            descrip={t('tippy.double-click')}
-                            children={
-                                <span
-                                    className={hidden ? 'detail-description' : 'hidden-password detail-description'}
-                                    onDoubleClick={() => setHidden(!hidden)}
-                                >
-                                    {currentUser && currentUser.data && currentUser.data.password}
-                                </span>
-                            }
-                        />
-                    </div>
+                    {type === 'exam' ? (
+                        <div className="col-12">
+                            <span className="detail-title">{t('modal.exam-password')}</span>
+                            <span>:</span>
+                            <ButtonNotify
+                                descrip={t('tippy.double-click')}
+                                children={
+                                    <span
+                                        className={hidden ? 'detail-description' : 'hidden-password detail-description'}
+                                        onDoubleClick={() => setHidden(!hidden)}
+                                    >
+                                        {currentUser && currentUser.data && currentUser.data.password}
+                                    </span>
+                                }
+                            />
+                        </div>
+                    ) : (
+                        <></>
+                    )}
                     <div className="col-12">
                         <span className="detail-title">{t('modal.score')} </span>
                         <span>:</span>
@@ -199,14 +199,14 @@ function ModalDetailUser({ handleCloseModalDetail, isOpenModal, data, type, rati
                                 : ''}
                         </span>
                     </div>
-                    <div className="col-12 description-container">
+                    {/* <div className="col-12 description-container">
                         <span className="detail-title">{t('modal.description')} </span>
                         <span>:</span>
 
                         <span className="detail-description">
                             {currentUser && currentUser.data && currentUser.data.description}
                         </span>
-                    </div>
+                    </div> */}
                 </div>
             )
         } else if (type === 'userDoExam') {
@@ -269,7 +269,7 @@ function ModalDetailUser({ handleCloseModalDetail, isOpenModal, data, type, rati
                 <Modal.Body>{showViewContentModal()}</Modal.Body>
                 <Modal.Footer>
                     {ratings && (
-                        <Link to={`/ratings/${data._id}`} className="ratings-go-btn" variant="secondary">
+                        <Link to={`/ratings/${data && data._id}`} className="ratings-go-btn" variant="secondary">
                             {t('ratings.ratings')}
                         </Link>
                     )}

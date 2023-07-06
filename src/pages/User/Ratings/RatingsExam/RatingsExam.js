@@ -35,6 +35,7 @@ import FilterExam from '../../../../component/Filter/FilterExam/FilterExam'
 import FilterRatings from '../../../../component/Filter/FilterRatings/FilterRatings'
 import { toast } from 'react-toastify'
 import MyRatings from './MyRatings/MyRatings'
+import ReactPaginate from 'react-paginate'
 
 function RatingsExam() {
     const { examId } = useParams()
@@ -42,6 +43,10 @@ function RatingsExam() {
     const language = useSelector((state) => state.app.language)
     let navigate = useNavigate()
     const user = useSelector((state) => state.user)
+
+    const [currentPage, setCurrentPage] = useState(0)
+    const [itemsPerPage, setItemsPerPage] = useState(5)
+    const [newListExam, setNewListExam] = useState([])
 
     const [valueSearch, setValueSearch] = useState('')
     const [searchResult, setSearchResult] = useState([])
@@ -200,7 +205,7 @@ function RatingsExam() {
     //my ratings
 
     let handleToMyRatings = async () => {
-        let respon = await examService.getAllDoExamRatings(user.userInfo._id)
+        let respon = await examService.getAllDoExamRatings(user.userInfo.email)
 
         if (respon && respon.errCode === 0) {
             let copyData = respon.data
@@ -212,6 +217,7 @@ function RatingsExam() {
                     if (copyData[i].users[j].userID === user.userInfo._id) {
                         copyListMyRatings.push({
                             infor: copyData[i].users[j],
+                            exam: copyData[i].data,
                             rank: j + 1,
                         })
 
@@ -227,7 +233,21 @@ function RatingsExam() {
             // console.log(listIndexRatings)
         }
     }
-    console.log(listUserDoExam)
+
+    let handlePageChange = (selectedPage) => {
+        //console.log(selectedPage)
+        setCurrentPage(selectedPage.selected)
+        // Thực hiện các tác vụ cần thiết khi chuyển trang
+    }
+
+    useEffect(() => {
+        let slicedData =
+            listUserDoExam &&
+            listUserDoExam.length > 0 &&
+            listUserDoExam.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+        setNewListExam(slicedData)
+    }, [listUserDoExam, currentPage])
+
     return (
         <>
             <HeaderHome />
@@ -342,13 +362,13 @@ function RatingsExam() {
                                     <div className="table-body">
                                         <table>
                                             <tbody>
-                                                {listUserDoExam &&
-                                                    listUserDoExam.length > 0 &&
-                                                    listUserDoExam.map((item, index) => {
+                                                {newListExam &&
+                                                    newListExam.length > 0 &&
+                                                    newListExam.map((item, index) => {
                                                         return (
                                                             <tr
                                                                 className={
-                                                                    item.userID === user.userInfo._id ? 'my-exam' : ''
+                                                                    item.email === user.userInfo.email ? 'my-exam' : ''
                                                                 }
                                                                 key={index}
                                                             >
@@ -377,6 +397,22 @@ function RatingsExam() {
                                             </tbody>
                                         </table>
                                     </div>
+                                    <ReactPaginate
+                                        previousLabel={currentPage === 0 ? null : t('admin.previous')}
+                                        nextLabel={
+                                            currentPage === Math.ceil(listUserDoExam.length / itemsPerPage) - 1
+                                                ? null
+                                                : t('admin.next')
+                                        }
+                                        breakLabel={'...'}
+                                        breakClassName={'break-me'}
+                                        pageCount={Math.ceil(listUserDoExam.length / itemsPerPage)} // Tổng số trang
+                                        marginPagesDisplayed={2}
+                                        pageRangeDisplayed={5}
+                                        onPageChange={handlePageChange}
+                                        containerClassName={'pagination'}
+                                        activeClassName={'active'}
+                                    />
                                 </div>
                             ) : (
                                 <div className="list-user-img"></div>

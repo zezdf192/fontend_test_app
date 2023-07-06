@@ -40,8 +40,8 @@ const sortDoExamByType = (data) => {
     return axios.post(`/api/sort-do-exam-by-key`, data)
 }
 
-const searchAllExamByUserID = (data) => {
-    return axios.post(`/api/search-all-exam-by-user-id`, data)
+const searchAllExamByUserEmail = (data) => {
+    return axios.post(`/api/search-all-exam-by-user-email`, data)
 }
 
 const getAllExamByUserId = (data) => {
@@ -64,12 +64,28 @@ const filterExamRatings = (data) => {
     return axios.post(`/api/filter-exam-ratings`, data)
 }
 
-const getAllDoExamRatings = (userID) => {
-    return axios.get(`/api/get-all-do-exam-ratings?userID=${userID}`)
+const getAllDoExamRatings = (email) => {
+    return axios.get(`/api/get-all-do-exam-ratings?email=${email}`)
 }
 
 const sortMyRatingsByType = (data) => {
     return axios.post(`/api/sort-my-ratings-by-type`, data)
+}
+
+const createCopyScoreBelongToUser = (data) => {
+    return axios.post(`/api/create-copy-score-belong-to-user`, data)
+}
+
+const getCopyScoreByCode = (code) => {
+    return axios.get(`/api/get-copy-score-by-code?code=${code}`)
+}
+
+const getExamPrivateByCode = (data) => {
+    return axios.post(`/api/get-exam-private-by-code`, data)
+}
+
+const getDetailExamPrivateForVerify = (data) => {
+    return axios.post(`/api/get-detail-exam-private-for-verify`, data)
 }
 
 export default {
@@ -83,7 +99,7 @@ export default {
     getAllDoExamByUserId,
     searchAllDoExamByUserId,
     sortDoExamByType,
-    searchAllExamByUserID,
+    searchAllExamByUserEmail,
     getAllExamByUserId,
     sortExamByType,
     getLessListExamRatings,
@@ -91,4 +107,8 @@ export default {
     filterExamRatings,
     getAllDoExamRatings,
     sortMyRatingsByType,
+    createCopyScoreBelongToUser,
+    getCopyScoreByCode,
+    getExamPrivateByCode,
+    getDetailExamPrivateForVerify,
 }

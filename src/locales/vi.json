@@ -13,7 +13,9 @@
         "exam-duration": "Thời gian thi",
         "total-exams-created": "Số bài thi đã tạo",
         "total-exams-administered": "Số bài thi tham gia",
-        "close": "Đóng"
+        "close": "Đóng",
+        "previous": "Trước",
+        "next": "Sau"
     },
     "log-in": {
         "register": "Đăng ký",
@@ -72,9 +74,12 @@
         "text": "Đảm bảo rằng bạn đang ở trong một môi trường yên tĩnh với kết nối internet ổn định và hạn chế bị phân tâm. Chúc may mắn!",
         "back": "Quay lại trang chủ",
         "start": "Bắt đầu bài thi",
-        "like-count": "Số lượt yêu thích: "
+        "like-count": "Số lượt yêu thích: ",
+        "note": "Thông tin bài làm của bạn sẽ không được lưu nếu không đăng nhập"
     },
     "result": {
+        "homepage": "Trang chủ",
+        "retake-exam": "Làm lại bài thi",
         "exam-results": "Kết quả bài thi của bạn",
         "score": "Điểm thi",
         "time": "Thời gian làm bài",
@@ -147,6 +152,13 @@
         "confirm": "Xác nhận",
         "success": "Lọc thành công",
         "fail": "Lọc thất bại",
+        "enter-data": "Nhập dữ liệu",
+        "name": "Tên",
+        "enter-name": "Nhập tên",
+        "exam-code": "Nhập mã bài thi",
+        "code": "Mã bài thi",
+        "enter-email": "Nhập email",
+        "email": "Email",
         "toast-no-future": "Tính năng không áp dụng cho bảng xếp hạng của bạn, bạn có thể ấn vào biểu tưởng sắp xếp để sắp xếp dữ liệu"
     },
     "filter-exam": {
@@ -273,7 +285,9 @@
         "incorrect-password": "Mật khẩu không chính xác",
         "invalid": "Chưa nhập đúng định dạng dữ liệu",
         "send-fail": "Gửi mã thất bại",
-        "incorrect-code": "Mã xác nhận không chính xác"
+        "incorrect-code": "Mã xác nhận không chính xác",
+        "exam-code-not-exist": "Mã bài thi không tồn tại",
+        "server-error": "Lỗi server, vui lòng thử lại sau"
     },
     "not-found": {
         "no-data": "Không tìm thấy nội dung",

@@ -1,9 +1,6 @@
 .modal-body {
     padding: 10px 14px !important;
     .description-container {
-        white-space: nowrap; /* Tránh ngắn gọn nội dung trên một dòng */
-        //overflow: visible; /* Ẩn phần dư của nội dung khi vượt quá độ dài */
-        text-overflow: ellipsis; /* Hiển thị dấu chấm elipsis (...) khi nội dung bị ẩn */
     }
 
     .detail-title {
@@ -13,6 +10,11 @@
 
     .detail-description {
         margin-left: 40px;
+
+        max-width: 100%;
+        word-wrap: break-word;
+        /* hoặc */
+        overflow-wrap: break-word;
 
         &.hidden-password {
             -webkit-text-security: disc;

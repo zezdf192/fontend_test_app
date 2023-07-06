@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
@@ -7,10 +7,11 @@ import './ResultExam.scss'
 import examService from '../../../service/examService'
 import HeaderHome from '../../HomePage/HeaderHome/HeaderHome'
 import ResultQuestionItem from './QuestionItem/ResultQuestionItem'
+import { path } from '../../../until/constant'
 
 function ResultExam() {
     const { t } = useTranslation()
-    const { examId } = useParams()
+    const { copyScoreId, examId, email, nameUser } = useParams()
     const user = useSelector((state) => state.user)
     const language = useSelector((state) => state.app.language)
 
@@ -18,26 +19,30 @@ function ResultExam() {
     const [listMyAnswer, setListMyAnswer] = useState([])
     const [examInfo, setExamInfo] = useState()
     const [typeAnswer, setTypeAnswer] = useState()
+    const [typeExam, setTypeExam] = useState()
     const [listQuestions, setListQuestions] = useState([])
     //console.log(user.userInfo._id)
 
     let callAPI = async () => {
-        let respon = await examService.getDetailExamById(examId)
-        let responDoExam = await examService.getDetailDoExamById({ userID: user.userInfo._id, examID: examId })
+        let respon = await examService.getCopyScoreByCode(copyScoreId)
+        // if (email !== 'undefine' && nameUser !== 'undefine') {
+        //     let responDoExam = await examService.getDetailDoExamById({ email: email, examID: examId })
+        //     if (responDoExam && responDoExam.errCode === 0) {
+        //         //console.log(responDoExam)
+        //         setMyAnswer(responDoExam.data)
+        //     }
+        // }
 
         if (respon && respon.errCode === 0) {
+            //console.log(respon.data.examInfo)
             setExamInfo(respon.data.data)
-            setTypeAnswer(respon.data.exam.data.typeAnswer)
-            setListQuestions(respon.data.exam.data.questions)
+            setTypeExam(respon.data.examInfo.data.typeExam)
+            setTypeAnswer(respon.data.examInfo.data.typeAnswer)
+            setListQuestions(respon.data.examInfo.data.questions)
+            setListMyAnswer(respon.data.userAnswer)
         }
 
         //console.log(responDoExam)
-        if (responDoExam && responDoExam.errCode === 0) {
-            setMyAnswer(responDoExam && responDoExam.data)
-            setListMyAnswer(
-                responDoExam && responDoExam.data && responDoExam.data.data && responDoExam.data.data.answers,
-            )
-        }
     }
 
     useEffect(() => {
@@ -59,36 +64,29 @@ function ResultExam() {
                             <div className="col-12">
                                 <span className="detail-title">{t('result.exam-results')}</span>
                                 <span>:</span>
-                                <span className="detail-description">
-                                    {myAnswer && myAnswer.data && myAnswer.data.currentScore}
-                                </span>
+                                <span className="detail-description">{examInfo && examInfo.currentScore}</span>
                             </div>
                             <div className="col-12">
                                 <span className="detail-title">{t('result.time')}</span>
                                 <span>:</span>
                                 <span className="detail-description">
-                                    {myAnswer && myAnswer.data
+                                    {examInfo
                                         ? language === 'en'
-                                            ? myAnswer.data.currentTimeEn
-                                            : myAnswer.data.currentTimeVi
+                                            ? examInfo.currentTimeEn
+                                            : examInfo.currentTimeVi
                                         : ''}
                                 </span>
                             </div>
                             <div className="col-12">
                                 <span className="detail-title">{t('result.number-attempts')} </span>
                                 <span>:</span>
-                                <span className="detail-description">
-                                    {' '}
-                                    {myAnswer && myAnswer.data && myAnswer.data.quantityJoin}
-                                </span>
+                                <span className="detail-description"> {examInfo && examInfo.quantityJoin}</span>
                             </div>
                             <div className="col-12">
                                 <span className="detail-title">{t('result.number-correct')}</span>
                                 <span>:</span>
                                 <span className="detail-description">
-                                    {myAnswer &&
-                                        myAnswer.data &&
-                                        `${myAnswer.data.currentQuantityAnswerTrue}/${myAnswer.data.answers.length}`}
+                                    {examInfo && `${examInfo.currentQuantityAnswerTrue}/${examInfo.answers.length}`}
                                 </span>
                             </div>
                         </div>
@@ -104,8 +102,28 @@ function ResultExam() {
                             })}
                     </div>
                 ) : (
-                    <div></div>
+                    <></>
                 )}
+                <div className="result-bottom">
+                    {typeExam === 'PUBLIC' ? (
+                        <Link
+                            to={
+                                user && user.userInfo
+                                    ? `/verification/${user.userInfo.email}/${user.userInfo.name}/${examId}`
+                                    : `/verification/undefine/undefine/${examId}`
+                            }
+                            className="button-btn"
+                        >
+                            {t('result.retake-exam')}
+                        </Link>
+                    ) : (
+                        <></>
+                    )}
+
+                    <Link className="button-btn" to={path.home}>
+                        {t('result.homepage')}
+                    </Link>
+                </div>
             </div>
         </>
     )

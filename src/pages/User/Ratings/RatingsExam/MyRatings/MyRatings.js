@@ -14,13 +14,18 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import examService from '../../../../../service/examService'
 import ModalDetailUser from '../../../../Admin/ModalDetailUser/ModalDetailUser'
+import ReactPaginate from 'react-paginate'
 
 function MyRatings({ listMyRating }) {
     const { examId } = useParams()
     const { t } = useTranslation()
     const language = useSelector((state) => state.app.language)
     let navigate = useNavigate()
-    const user = useSelector((state) => state.user)
+    const user = useSelector((state) => state.user.userInfo)
+
+    const [currentPage, setCurrentPage] = useState(0)
+    const [itemsPerPage, setItemsPerPage] = useState(5)
+    const [newListExam, setNewListExam] = useState([])
 
     const [listMyRatings, setListMyRatings] = useState([])
     const [iconSort, setIconSort] = useState(<FontAwesomeIcon className="icon-sort" icon={faArrowDownAZ} />)
@@ -69,16 +74,6 @@ function MyRatings({ listMyRating }) {
 
         setFieldSort(type)
         setArrayTableTitles(copyArrayTableTitles)
-
-        // let respon = await examService.sortMyRatingsByType({
-        //     userID: user && user.userInfo && user.userInfo._id,
-        //     type: type,
-        //     typeSort: arrayTableTitles[index].status,
-        // })
-
-        // if (respon && respon.errCode === 0) {
-        //     //setListMyRatings(respon.data)
-        // }
 
         if (type === 'rank') {
             let copyArray = listMyRatings
@@ -146,9 +141,27 @@ function MyRatings({ listMyRating }) {
     }
 
     let handleStartDoExam = (data) => {
-        navigate(`/verification/${data.infor.examID}`)
+        if (user) {
+            navigate(`/verification/${user.email}/${user.name}/${data.infor.examID}`)
+        } else {
+            navigate(`/verification/undefine/undefine/${data.infor.examID}`)
+        }
     }
 
+    let handlePageChange = (selectedPage) => {
+        //console.log(selectedPage)
+        setCurrentPage(selectedPage.selected)
+        // Thực hiện các tác vụ cần thiết khi chuyển trang
+    }
+
+    useEffect(() => {
+        let slicedData =
+            listMyRatings &&
+            listMyRatings.length > 0 &&
+            listMyRatings.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+        setNewListExam(slicedData)
+    }, [listMyRatings, currentPage])
+    console.log(newListExam)
     return (
         <>
             {listMyRatings && listMyRatings.length > 0 && (
@@ -183,9 +196,9 @@ function MyRatings({ listMyRating }) {
                     <div className="table-body">
                         <table>
                             <tbody>
-                                {listMyRatings &&
-                                    listMyRatings.length > 0 &&
-                                    listMyRatings.map((item, index) => {
+                                {newListExam &&
+                                    newListExam.length > 0 &&
+                                    newListExam.map((item, index) => {
                                         return (
                                             <tr key={index}>
                                                 <td className="px-5">{item.infor.nameExam}</td>
@@ -206,20 +219,26 @@ function MyRatings({ listMyRating }) {
                                                             </button>
                                                         }
                                                     />
-
-                                                    <ButtonNotify
-                                                        descrip={t('tippy.start-exam')}
-                                                        children={
-                                                            <button
-                                                                className="btn-view"
-                                                                notifi="Tới bài thi"
-                                                                onClick={() => handleStartDoExam(item)}
-                                                            >
-                                                                {' '}
-                                                                <FontAwesomeIcon className="btn-edit" icon={faPlay} />
-                                                            </button>
-                                                        }
-                                                    />
+                                                    {item.exam.typeExam === 'PUBLIC' ? (
+                                                        <ButtonNotify
+                                                            descrip={t('tippy.start-exam')}
+                                                            children={
+                                                                <button
+                                                                    className="btn-view"
+                                                                    notifi="Tới bài thi"
+                                                                    onClick={() => handleStartDoExam(item)}
+                                                                >
+                                                                    {' '}
+                                                                    <FontAwesomeIcon
+                                                                        className="btn-edit"
+                                                                        icon={faPlay}
+                                                                    />
+                                                                </button>
+                                                            }
+                                                        />
+                                                    ) : (
+                                                        <></>
+                                                    )}
                                                 </td>
                                             </tr>
                                         )
@@ -227,11 +246,25 @@ function MyRatings({ listMyRating }) {
                             </tbody>
                         </table>
                     </div>
+                    <ReactPaginate
+                        previousLabel={currentPage === 0 ? null : t('admin.previous')}
+                        nextLabel={
+                            currentPage === Math.ceil(listMyRatings.length / itemsPerPage) - 1 ? null : t('admin.next')
+                        }
+                        breakLabel={'...'}
+                        breakClassName={'break-me'}
+                        pageCount={Math.ceil(listMyRatings.length / itemsPerPage)} // Tổng số trang
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={handlePageChange}
+                        containerClassName={'pagination'}
+                        activeClassName={'active'}
+                    />
                 </div>
             )}
             {isOpenModalDetail && (
                 <ModalDetailUser
-                    data={currentUser}
+                    data={currentUser && currentUser.exam}
                     isOpenModal={isOpenModalDetail}
                     handleCloseModalDetail={handleCloseModalDetail}
                     type="doExam"

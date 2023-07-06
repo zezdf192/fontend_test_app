@@ -94,7 +94,7 @@ const FilterExam = ({ isOpenFilter, showModal, children, updateListDoExam, chang
     let callAPI = async (buildData) => {
         //console.log(buildData)
 
-        let respon = await examService.searchAllExamByUserID(buildData)
+        let respon = await examService.searchAllExamByUserEmail(buildData)
 
         if (respon && respon.errCode === 0) {
             updateListDoExam(respon.data)
@@ -109,7 +109,7 @@ const FilterExam = ({ isOpenFilter, showModal, children, updateListDoExam, chang
         form.validateFields().then((values) => {
             // Xử lý dữ liệu sau khi người dùng nhấp OK
             let buildData = {
-                userID: user.userInfo._id,
+                email: user.userInfo.email,
                 nameExam,
                 currentJoin,
                 typeCurrentJoin,

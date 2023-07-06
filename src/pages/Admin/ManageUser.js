@@ -14,12 +14,17 @@ import userService from '../../service/userService'
 import { faEye } from '@fortawesome/free-regular-svg-icons'
 import { sideBarAdmin } from '../../component/RouteSideBar/routeSideBar'
 import SideBar from '../User/MyExam/SideBar/SideBar'
+import ReactPaginate from 'react-paginate'
 
 function ManageUser() {
     const { t } = useTranslation()
     const language = useSelector((state) => state.app.language)
 
     const [listUsers, setListUsers] = useState([])
+
+    const [currentPage, setCurrentPage] = useState(0)
+    const [itemsPerPage, setItemsPerPage] = useState(5)
+    const [newListExam, setNewListExam] = useState([])
 
     //delete modal
     const [isOpenModal, setIsOpenModal] = useState(false)
@@ -98,6 +103,20 @@ function ManageUser() {
 
     // console.log(listUsers)
 
+    let handlePageChange = (selectedPage) => {
+        //console.log(selectedPage)
+        setCurrentPage(selectedPage.selected)
+        // Thực hiện các tác vụ cần thiết khi chuyển trang
+    }
+
+    useEffect(() => {
+        let slicedData =
+            listUsers &&
+            listUsers.length > 0 &&
+            listUsers.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+        setNewListExam(slicedData)
+    }, [listUsers, currentPage])
+
     return (
         <>
             <AdminNavigation />
@@ -124,9 +143,9 @@ function ManageUser() {
                             <div className="table-body">
                                 <table>
                                     <tbody>
-                                        {listUsers &&
-                                            listUsers.length > 0 &&
-                                            listUsers.map((item, index) => {
+                                        {newListExam &&
+                                            newListExam.length > 0 &&
+                                            newListExam.map((item, index) => {
                                                 return (
                                                     <tr key={index}>
                                                         <td className="px-5">{index + 1}</td>
@@ -159,6 +178,22 @@ function ManageUser() {
                                     </tbody>
                                 </table>
                             </div>
+                            <ReactPaginate
+                                previousLabel={currentPage === 0 ? null : t('admin.previous')}
+                                nextLabel={
+                                    currentPage === Math.ceil(listUsers.length / itemsPerPage) - 1
+                                        ? null
+                                        : t('admin.next')
+                                }
+                                breakLabel={'...'}
+                                breakClassName={'break-me'}
+                                pageCount={Math.ceil(listUsers.length / itemsPerPage)} // Tổng số trang
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                onPageChange={handlePageChange}
+                                containerClassName={'pagination'}
+                                activeClassName={'active'}
+                            />
                         </div>
                     </div>
                 </div>

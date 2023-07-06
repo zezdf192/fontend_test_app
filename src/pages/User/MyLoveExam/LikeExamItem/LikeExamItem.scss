@@ -1,4 +1,5 @@
 .like-exam-item {
+    min-height: 230px;
     align-items: flex-start;
     border-bottom: 1px solid #d0d7de;
     display: flex;
@@ -7,10 +8,10 @@
     padding-bottom: 12px;
     .like-exam-img {
         border-radius: 16px;
-        height: 50%;
+        height: 200px;
         object-fit: cover;
         margin-right: 30px;
-        width: 50%;
+        width: 280px;
 
         &:hover {
             cursor: pointer;

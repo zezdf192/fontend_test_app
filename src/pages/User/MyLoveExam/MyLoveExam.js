@@ -12,12 +12,17 @@ import LikeExamItem from './LikeExamItem/LikeExamItem'
 import { path } from '../../../until/constant'
 
 import './MyLoveExam.scss'
+import ReactPaginate from 'react-paginate'
 
 function MyLoveExam() {
     const { t } = useTranslation()
     const language = useSelector((state) => state.app.language)
     let navigate = useNavigate()
     const user = useSelector((state) => state.user)
+
+    const [currentPage, setCurrentPage] = useState(0)
+    const [itemsPerPage, setItemsPerPage] = useState(2)
+    const [newListExam, setNewListExam] = useState([])
 
     const [listLikeExam, setListLikeExam] = useState([])
 
@@ -33,6 +38,20 @@ function MyLoveExam() {
         callAPI()
     }, [])
 
+    let handlePageChange = (selectedPage) => {
+        //console.log(selectedPage)
+        setCurrentPage(selectedPage.selected)
+        // Thực hiện các tác vụ cần thiết khi chuyển trang
+    }
+
+    useEffect(() => {
+        let slicedData =
+            listLikeExam &&
+            listLikeExam.length > 0 &&
+            listLikeExam.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+        setNewListExam(slicedData)
+    }, [listLikeExam, currentPage])
+
     return (
         <>
             <HeaderHome />
@@ -45,10 +64,31 @@ function MyLoveExam() {
                     </div>
                     <div className={listLikeExam && listLikeExam.length > 0 ? 'list-exam-body' : 'list-exam-body none'}>
                         <h2>{t('favorite.favorite-exams')}</h2>
-                        {listLikeExam && listLikeExam.length > 0 ? (
-                            listLikeExam.map((item) => {
-                                return <LikeExamItem data={item} />
-                            })
+                        {newListExam && newListExam.length > 0 ? (
+                            <>
+                                {newListExam.map((item) => {
+                                    return <LikeExamItem data={item} />
+                                })}
+                                <>
+                                    {' '}
+                                    <ReactPaginate
+                                        previousLabel={currentPage === 0 ? null : t('admin.previous')}
+                                        nextLabel={
+                                            currentPage === Math.ceil(listLikeExam.length / itemsPerPage) - 1
+                                                ? null
+                                                : t('admin.next')
+                                        }
+                                        breakLabel={'...'}
+                                        breakClassName={'break-me'}
+                                        pageCount={Math.ceil(listLikeExam.length / itemsPerPage)} // Tổng số trang
+                                        marginPagesDisplayed={2}
+                                        pageRangeDisplayed={5}
+                                        onPageChange={handlePageChange}
+                                        containerClassName={'pagination'}
+                                        activeClassName={'active'}
+                                    />
+                                </>
+                            </>
                         ) : (
                             <div className="no-data">
                                 <span className="top">{t('favorite.no-exam')}</span>

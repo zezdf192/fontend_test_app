@@ -12,13 +12,14 @@ import { faStar } from '@fortawesome/free-solid-svg-icons'
 import userService from '../../service/userService'
 
 function Verification() {
-    const { examId } = useParams()
+    const { examId, email, nameUser } = useParams()
     const user = useSelector((state) => state.user)
     const language = useSelector((state) => state.app.language)
     const { t } = useTranslation()
 
     const [exam, setExam] = useState()
     const [isLike, setIsLike] = useState()
+    const [showLike, setShowLike] = useState(false)
 
     let navigate = useNavigate()
 
@@ -28,22 +29,37 @@ function Verification() {
 
     let handleStartExam = () => {
         if (examId) {
-            navigate(`/exam/${examId}`)
+            navigate(`/exam/${email}/${nameUser}/${examId}`)
         }
     }
 
     let callAPI = async () => {
         let respon = await examService.getDetailExamById(examId)
-        let responLike = await userService.getExamUserLike({ email: user.userInfo.email, examId: examId })
-
-        if (responLike && responLike.errCode === 0) {
-            setIsLike(responLike.data)
+        // console.log('examId', examId)
+        // let respon = await examService.getDetailExamPrivateForVerify({
+        //     examId,
+        //     email,
+        //     nameUser,
+        // })
+        if (user.userInfo) {
+            let responLike = await userService.getExamUserLike({ email: user.userInfo.email, examId: examId })
+            if (responLike && responLike.errCode === 0) {
+                setIsLike(responLike.data)
+            }
         }
 
         if (respon && respon.errCode === 0) {
             setExam(respon.data.exam)
         }
     }
+
+    useEffect(() => {
+        if (exam && exam.data && exam.data.typeExam === 'PUBLIC') {
+            setShowLike(true)
+        } else {
+            setShowLike(false)
+        }
+    }, [exam])
 
     useEffect(() => {
         callAPI()
@@ -69,12 +85,15 @@ function Verification() {
                                 <img className="img-exam" src={exam && exam.data && exam.data.image} alt="" />
                                 <h2>{exam && exam.data && exam.data.title}</h2>
                             </div>
-
-                            <FontAwesomeIcon
-                                onClick={handleLike}
-                                className={isLike ? 'icon-star active' : 'icon-star'}
-                                icon={faStar}
-                            />
+                            {showLike && user.userInfo ? (
+                                <FontAwesomeIcon
+                                    onClick={handleLike}
+                                    className={isLike ? 'icon-star active' : 'icon-star'}
+                                    icon={faStar}
+                                />
+                            ) : (
+                                <></>
+                            )}
                         </div>
                         <p>
                             {exam && exam.data && exam.data.time
@@ -88,11 +107,16 @@ function Verification() {
 
                             {exam && exam.data && exam.data.questions && exam.data.questions.length}
                         </p>
-                        <p>
-                            {t('verifi.like-count')}
+                        {showLike ? (
+                            <p>
+                                {t('verifi.like-count')}
 
-                            {exam && exam.data && exam.data.quantityLike && exam.data.quantityLike.length}
-                        </p>
+                                {exam && exam.data && exam.data.quantityLike && exam.data.quantityLike.length}
+                            </p>
+                        ) : (
+                            <></>
+                        )}
+
                         <p>
                             {t('verifi.description')}
 
@@ -107,6 +131,7 @@ function Verification() {
                                 {t('verifi.start')}
                             </button>
                         </div>
+                        {!user.userInfo ? <span className="note"> {t('verifi.note')}</span> : <></>}
                     </div>
                 </div>
             </div>

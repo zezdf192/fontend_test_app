@@ -6,23 +6,23 @@ import './ResultQuestionItem.scss'
 
 function ResultQuestionItem({ index, questionInfo, myAnswer }) {
     const [listAnswer, setListAnswer] = useState([])
-    //console.log(myAnswer)
+    console.log(myAnswer)
     //console.log(questionInfo)
     useEffect(() => {
         setListAnswer(questionInfo.answers)
     }, [questionInfo])
 
-    let handleNullAnswer = (item, i) => {
+    let handleNullAnswer = (item) => {
         if (item.isAnswerTrue) {
             return 'answer-item correct'
-        }
-        if (myAnswer[index] !== null) {
-            //console.log(myAnswer[index][0])
+        } else if (myAnswer[index] !== null) {
+            //console.log(item.answerId)
+            if (myAnswer[index].answer.answerId === item.answerId) {
+                //console.log('hahaa')
 
-            if (myAnswer[index] && myAnswer[index][0] === i) {
                 return 'answer-item false'
             } else {
-                return 'answer-item'
+                return 'answer-item '
             }
         } else {
             return 'answer-item'
@@ -36,7 +36,7 @@ function ResultQuestionItem({ index, questionInfo, myAnswer }) {
             listAnswer.map((item, i) => {
                 return (
                     <>
-                        <div key={i} className={handleNullAnswer(item, i)}>
+                        <div key={i} className={handleNullAnswer(item)}>
                             <label>{item.keyAnswer}</label>
 
                             <span>{item.title}</span>

@@ -62,9 +62,13 @@ function HeaderHome() {
                             {/* <NavLink to="/admin/manageUser" className="item">
                             Quản lý người dùng
                         </NavLink> */}
-                            <NavLink to="/myExam" className="item">
-                                {t('home-page.your-exam')}
-                            </NavLink>
+                            {user && user.userInfo ? (
+                                <NavLink to="/myExam" className="item">
+                                    {t('home-page.your-exam')}
+                                </NavLink>
+                            ) : (
+                                <></>
+                            )}
 
                             <div className="language">
                                 <span

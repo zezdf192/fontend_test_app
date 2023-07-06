@@ -16,6 +16,7 @@ import ModalNotify from '../../component/Modal/ModalNotify'
 import SideBar from '../User/MyExam/SideBar/SideBar'
 import { sideBarAdmin } from '../../component/RouteSideBar/routeSideBar'
 import FilterExam from '../../component/Filter/FilterExam/FilterExam'
+import ReactPaginate from 'react-paginate'
 
 function ManageExam() {
     const { t } = useTranslation()
@@ -23,6 +24,10 @@ function ManageExam() {
     const language = useSelector((state) => state.app.language)
 
     let navigate = useNavigate()
+
+    const [currentPage, setCurrentPage] = useState(0)
+    const [itemsPerPage, setItemsPerPage] = useState(5)
+    const [newListExam, setNewListExam] = useState([])
 
     const [listExam, setListExam] = useState([])
 
@@ -138,6 +143,20 @@ function ManageExam() {
         setDataSearch(data)
     }
 
+    let handlePageChange = (selectedPage) => {
+        //console.log(selectedPage)
+        setCurrentPage(selectedPage.selected)
+        // Thực hiện các tác vụ cần thiết khi chuyển trang
+    }
+
+    useEffect(() => {
+        let slicedData =
+            listExam &&
+            listExam.length > 0 &&
+            listExam.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+        setNewListExam(slicedData)
+    }, [listExam, currentPage])
+
     return (
         <>
             <AdminNavigation />
@@ -177,9 +196,9 @@ function ManageExam() {
                             <div className="table-body">
                                 <table>
                                     <tbody>
-                                        {listExam &&
-                                            listExam.length > 0 &&
-                                            listExam.map((item, index) => {
+                                        {newListExam &&
+                                            newListExam.length > 0 &&
+                                            newListExam.map((item, index) => {
                                                 return (
                                                     <tr key={index}>
                                                         <td className="px-5">{index + 1}</td>
@@ -222,6 +241,23 @@ function ManageExam() {
                                     </tbody>
                                 </table>
                             </div>
+
+                            <ReactPaginate
+                                previousLabel={currentPage === 0 ? null : t('admin.previous')}
+                                nextLabel={
+                                    currentPage === Math.ceil(listExam.length / itemsPerPage) - 1
+                                        ? null
+                                        : t('admin.next')
+                                }
+                                breakLabel={'...'}
+                                breakClassName={'break-me'}
+                                pageCount={Math.ceil(listExam.length / itemsPerPage)} // Tổng số trang
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                onPageChange={handlePageChange}
+                                containerClassName={'pagination'}
+                                activeClassName={'active'}
+                            />
                         </div>
                     </div>
                 </div>
