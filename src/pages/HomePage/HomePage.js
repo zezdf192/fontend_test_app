@@ -222,16 +222,27 @@ function HomePage() {
                             newListExam.length > 0 &&
                             newListExam.map((item, index) => (
                                 <div key={index} className="exam-item" onClick={() => handleChooseExam(item)}>
-                                    <div className="img-container">
-                                        <img
-                                            className="img"
-                                            src={item.data.image}
-                                            alt="Ảnh bị lỗi, vui lòng tải lại!"
-                                        />
-                                    </div>
-                                    <div className="exam-body">
-                                        <p className="exam-title">{item.data.title}</p>
-                                    </div>
+                                    {item.data.image ? (
+                                        <div className="img-container">
+                                            <img
+                                                className="img"
+                                                src={item.data.image}
+                                                alt="Ảnh bị lỗi, vui lòng tải lại!"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="span-img-container">
+                                            <h3 className="span-img">{item.data.title}</h3>
+                                        </div>
+                                    )}
+                                    {item.data.image ? (
+                                        <div className="exam-body">
+                                            <p className="exam-title">{item.data.title}</p>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )}
+
                                     <div className="notify">
                                         <div className="quantity">
                                             <span>{item.data.quantityJoin || 0}</span>

@@ -85,7 +85,7 @@ function StartExam() {
     }, [])
 
     let handleSubmitExam = (type) => {
-        console.log(myAnswer)
+        console.log('type', type)
         let isCheck = false
         if (myAnswer) {
             for (let i = 0; i < myAnswer.length; i++) {
@@ -100,6 +100,7 @@ function StartExam() {
         }
         //console.log(countdown)
         if (type === 'time-out') {
+            setIsOpenModal(true)
             setTypeModal(type)
             setDescriptionModal('Bạn đã hết thời gian làm bài thi, bấm nút xác nhận để xem kết quả bài làm')
         } else if (!isCheck) {
@@ -163,8 +164,8 @@ function StartExam() {
     let handleSubmitModal = async () => {
         let questionBE = examInfo.data.questions
 
-        // console.log(countdown)
-        //console.log(examInfo.data)
+        //console.log('text clock')
+        //console.log(myAnswer)
         setIsOpenModal(false)
 
         let total = 0
@@ -197,13 +198,15 @@ function StartExam() {
         let dem = 0
         for (let i = 0; i < answerTrue.length; i++) {
             for (let j = 0; j < myAnswer.length; j++) {
-                if (answerTrue[i].questionId === myAnswer[j].questionId.questionId) {
-                    if (answerTrue[i].answerTrue === myAnswer[j].answer.answerId) {
-                        dem++
-                        quality++
-                        total += +myAnswer[j].questionId.score
+                if (myAnswer[j]) {
+                    if (answerTrue[i].questionId === myAnswer[j].questionId.questionId) {
+                        if (answerTrue[i].answerTrue === myAnswer[j].answer.answerId) {
+                            dem++
+                            quality++
+                            total += +myAnswer[j].questionId.score
+                        }
+                        break
                     }
-                    break
                 }
             }
         }
@@ -301,7 +304,6 @@ function StartExam() {
                         <div className="content-right">
                             {examInfo && examInfo.data && examInfo.data.time && examInfo.data.time !== 0 ? (
                                 <Clock
-                                    getTimeFromClock={getTimeFromClock}
                                     handleSubmitExam={handleSubmitExam}
                                     examInfo={examInfo && examInfo.data && examInfo.data.time && examInfo.data.time}
                                 />

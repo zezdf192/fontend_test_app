@@ -70,7 +70,6 @@ function MyLoveExam() {
                                     return <LikeExamItem data={item} />
                                 })}
                                 <>
-                                    {' '}
                                     <ReactPaginate
                                         previousLabel={currentPage === 0 ? null : t('admin.previous')}
                                         nextLabel={

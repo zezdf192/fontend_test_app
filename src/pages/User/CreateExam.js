@@ -25,6 +25,15 @@ function CreateExam() {
     const language = useSelector((state) => state.app.language)
     const user = useSelector((state) => state.user)
 
+    function generateRandomString(length) {
+        var result = ''
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * characters.length))
+        }
+        return result
+    }
+
     //init state
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [descriptionModal, setDescriptionModal] = useState('')
@@ -38,7 +47,9 @@ function CreateExam() {
 
     const [fix, setFix] = useState('')
     const [isValidChildren, setIsValidChildren] = useState()
+    const [password, setPassword] = useState(generateRandomString(6))
 
+    const [fixShowError, setFixShowError] = useState(false)
     const [isValid, setIsValid] = useState(false)
 
     const [isSubmit, setIsSubmit] = useState(false)
@@ -84,7 +95,6 @@ function CreateExam() {
     }
 
     let handleChangeTime = (option) => {
-        console.log(option)
         setSelectedTime(option)
     }
 
@@ -221,7 +231,7 @@ function CreateExam() {
         setScoreInitQuestion(resultScore)
 
         //setScoreQuestion([...array])
-    }, [selectedScore])
+    }, [selectedScore, listQuestions.length])
 
     //handle children component
 
@@ -281,18 +291,20 @@ function CreateExam() {
         setIsSubmit(true)
 
         renderQuestion()
-
         let isCheck = true
-        //console.log(typeof bool)
+        //if (!fixShowError) {
         if (typeof bool !== 'boolean') {
             isCheck = false
+
             setFix(Math.random())
+            return
         } else {
             if (bool === false) {
                 //console.log(bool)
                 isCheck = false
             }
         }
+        //}
 
         if (title.length <= 0) {
             setErrTitle('crud-exam.error-title')
@@ -307,11 +319,28 @@ function CreateExam() {
         } else {
             setErrDescription('')
         }
-
+        console.log(listQuestions)
         let total = 0
         let errScoreTotal = false
         for (let i = 0; i < listQuestions.length; i++) {
             total += +listQuestions[i].score
+
+            if (!listQuestions[i].title) {
+                isCheck = false
+            }
+            let activeScoreChech = false
+            for (let j = 0; j < listQuestions[i].answers.length; j++) {
+                if (!listQuestions[i].answers[j].title) {
+                    isCheck = false
+                }
+
+                if (listQuestions[i].answers[j].isAnswerTrue) {
+                    activeScoreChech = true
+                }
+            }
+            if (!activeScoreChech) {
+                isCheck = false
+            }
         }
 
         if (total !== selectedScore.valueNum) {
@@ -319,13 +348,7 @@ function CreateExam() {
             errScoreTotal = true
         }
 
-        if (!isCheck) {
-            if (!errScoreTotal) {
-                setError('crud-exam.error-missing')
-            } else {
-                setError('crud-exam.error-total')
-            }
-        } else {
+        if (isCheck) {
             setError('')
             setIsSubmit(false)
             setIsOpenModal(true)
@@ -333,6 +356,12 @@ function CreateExam() {
             setIsSubmit(true)
             renderQuestion()
             setTypeModal('submit')
+        } else {
+            if (!errScoreTotal) {
+                setError('crud-exam.error-missing')
+            } else {
+                setError('crud-exam.error-total')
+            }
         }
 
         //console.log(listQuestions)
@@ -340,6 +369,7 @@ function CreateExam() {
 
     let checkChildren = (bool) => {
         handleSaveExam(bool)
+        setFixShowError(true)
         setIsValidChildren(bool)
     }
 
@@ -352,7 +382,7 @@ function CreateExam() {
     let handleDeleteQuestion = async (id) => {
         if (listQuestions && listQuestions.length > 0) {
             let array = listQuestions
-            let fix = array.filter((item) => item.id !== id)
+            let fix = array.filter((item) => item.questionId !== id)
 
             setListQuestions([...fix])
 
@@ -362,22 +392,14 @@ function CreateExam() {
         }
     }
 
-    function generateRandomString(length) {
-        var result = ''
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-        for (var i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * characters.length))
-        }
-        return result
-    }
-
     let handleFinnal = async () => {
         let newDate = new Date()
         newDate.setHours(23, 59, 59, 0)
 
         let data = {
-            userID: user.userInfo._id,
-            password: generateRandomString(6),
+            //userID: user.userInfo._id,
+            email: user.userInfo.email,
+            password: password,
             title: title,
             score: selectedScore,
             description: description,
@@ -565,6 +587,15 @@ function CreateExam() {
                                     </div>
                                     <span>{t('crud-exam.text-hide')}</span>
                                 </div>
+                            </div>
+
+                            <div className="col-12 password">
+                                <span className="title-password">{t('crud-exam.password')}</span>
+
+                                <span classsName="key-password">{password}</span>
+                                <button onClick={() => setPassword(generateRandomString(6))} className="btn-password">
+                                    {t('crud-exam.change-password')}
+                                </button>
                             </div>
 
                             <div className="img-body">

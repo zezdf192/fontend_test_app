@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import './Clock.scss'
-function Clock({ examInfo, handleSubmitExam, getTimeFromClock }) {
+function Clock({ examInfo, handleSubmitExam }) {
     const [countdown, setCountdown] = useState('')
 
     let handleTimeUp = () => {
         handleSubmitExam('time-out')
-    }
-    if (examInfo === null) {
-        console.log(examInfo)
-        setCountdown('Không giới hạn thời gian')
     }
 
     //getTimeFromClock(countdown)
 
     useEffect(() => {
         const targetDate = new Date()
+        //examInfo.valueNum
         targetDate.setMinutes(targetDate.getMinutes() + examInfo.valueNum)
         const intervalId = setInterval(() => {
             const now = new Date().getTime()
@@ -26,9 +23,12 @@ function Clock({ examInfo, handleSubmitExam, getTimeFromClock }) {
             setCountdown(`${minutes}m ${seconds}s`)
 
             if (distance < 0) {
+                if (examInfo.value !== 'T0') {
+                    handleTimeUp()
+                    setCountdown('Hết thời gian')
+                }
+
                 clearInterval(intervalId)
-                setCountdown('Hết thời gian')
-                handleTimeUp()
             }
         }, 1000)
         return () => {
@@ -38,7 +38,7 @@ function Clock({ examInfo, handleSubmitExam, getTimeFromClock }) {
 
     return (
         <div className="countdown-timer">
-            <p>{countdown}</p>
+            <p>{examInfo.value === 'T0' ? 'Không giới hạn thời gian' : countdown}</p>
         </div>
     )
 }

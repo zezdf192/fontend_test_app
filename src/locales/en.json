@@ -192,6 +192,8 @@
         "notify-no-data": "No data available for filtering, please search for exams first"
     },
     "crud-exam": {
+        "change-password": "Change password",
+        "password": "Password",
         "add-exam": "Add new exam",
         "edit-exam": "Edit exam",
         "title-exam": "Title of the exam",
@@ -232,7 +234,8 @@
         "remove-success": "Question removed successfully",
         "edit-img-exam": "Altering the exam photo",
         "save-change": "Save changes",
-        "toast-miss": "You have not entered some required information, please check again"
+        "toast-miss": "You have not entered some required information, please check again",
+        "different-type": "If you change the type of the exam, the data of the participants who took the previous type will be lost. Are you sure?"
     },
     "ratings": {
         "ratings": "Ratings",

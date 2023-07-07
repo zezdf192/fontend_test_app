@@ -6,6 +6,23 @@
     margin-bottom: 20px;
     margin-top: 20px;
     padding-bottom: 12px;
+
+    .span-img-container {
+        width: 280px;
+        display: flex;
+        height: 200px;
+        justify-content: center;
+        align-items: center;
+        margin-right: 30px;
+        border: 1px solid #ccc;
+        border-radius: 16px;
+        .span-img {
+            font-size: 3rem;
+            overflow-wrap: anywhere;
+            padding: 10px 16px;
+        }
+    }
+
     .like-exam-img {
         border-radius: 16px;
         height: 200px;

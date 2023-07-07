@@ -34,7 +34,7 @@ function ResultExam() {
         // }
 
         if (respon && respon.errCode === 0) {
-            //console.log(respon.data.examInfo)
+            console.log(respon.data.data)
             setExamInfo(respon.data.data)
             setTypeExam(respon.data.examInfo.data.typeExam)
             setTypeAnswer(respon.data.examInfo.data.typeAnswer)
@@ -77,11 +77,11 @@ function ResultExam() {
                                         : ''}
                                 </span>
                             </div>
-                            <div className="col-12">
+                            {/* <div className="col-12">
                                 <span className="detail-title">{t('result.number-attempts')} </span>
                                 <span>:</span>
                                 <span className="detail-description"> {examInfo && examInfo.quantityJoin}</span>
-                            </div>
+                            </div> */}
                             <div className="col-12">
                                 <span className="detail-title">{t('result.number-correct')}</span>
                                 <span>:</span>

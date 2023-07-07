@@ -100,13 +100,20 @@ function QuestionItem({
     }
 
     let handleChangeInput = (e, index) => {
+        console.log('listAnswer', listAnswer)
         listAnswer[index].title = e.target.value
         setListAnswer([...listAnswer])
     }
 
     let handleChangeCheck = (e, index) => {
-        listAnswer[index].isAnswerTrue = e.target.checked
-        setListAnswer([...listAnswer])
+        let newArray = []
+        listAnswer.forEach((item) => {
+            item.isAnswerTrue = false
+            newArray.push(item)
+        })
+
+        newArray[index].isAnswerTrue = e.target.checked
+        setListAnswer([...newArray])
     }
 
     //CRUD answer
@@ -155,10 +162,10 @@ function QuestionItem({
 
                             <div className="action-answer">
                                 <input
-                                    type="checkbox"
+                                    type="radio"
                                     onChange={(e) => handleChangeCheck(e, index)}
                                     onClick={() => setErrAnswerTrue(false)}
-                                    name={item.keyAnswer}
+                                    name={`answer-${listAnswer[0].answerId}`}
                                     checked={item.isAnswerTrue}
                                 />
                                 <FontAwesomeIcon
@@ -390,7 +397,7 @@ function QuestionItem({
                             <div className="add-answer">
                                 <button
                                     className="btn-delete-question"
-                                    onClick={() => deleteQuestion(data && data.id && data.id)}
+                                    onClick={() => deleteQuestion(data && data.questionId)}
                                 >
                                     {t('crud-exam.remove-question')}
                                 </button>

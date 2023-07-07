@@ -20,6 +20,7 @@ import examService from '../../../service/examService'
 import ButtonNotify from '../../../component/ButtonNotify/ButtonNotify'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons'
+import HeaderHome from '../../HomePage/HeaderHome/HeaderHome'
 
 function EditExam(props) {
     const { examId } = useParams()
@@ -37,14 +38,13 @@ function EditExam(props) {
     const [userInfor, setUserInfor] = useState({})
     const [typeExam, setTypeExam] = useState('PUBLIC')
     const [typeAnswer, setTypeAnswer] = useState('PUBLIC')
-    const [password, setPassword] = useState('')
 
     const [scoreQuestion, setScoreQuestion] = useState([])
     const [typeModal, setTypeModal] = useState()
 
     const [fix, setFix] = useState('')
     const [isValidChildren, setIsValidChildren] = useState()
-
+    const [password, setPassword] = useState()
     const [isValid, setIsValid] = useState(false)
     const [file, setFile] = useState(null)
     const [isSubmit, setIsSubmit] = useState(false)
@@ -61,6 +61,8 @@ function EditExam(props) {
             answers: [],
         },
     ])
+
+    const [scoreInitQuestion, setScoreInitQuestion] = useState(null)
 
     //error state
     const [errTitle, setErrTitle] = useState()
@@ -189,8 +191,8 @@ function EditExam(props) {
         let responExam = await examService.getDetailExamById(examId)
 
         if (responExam && responExam.errCode === 0) {
-            let data = responExam.data
-
+            let data = responExam.data.exam
+            //console.log(data)
             let copyScore = data.data.score
             let copyLimit = data.data.limit
             let copyTime = data.data.time
@@ -222,27 +224,48 @@ function EditExam(props) {
         callAPIWhenChangeLanguage()
     }, [language])
 
-    let buildScoreQuestion = () => {
+    let buildScoreQuestion = (scoreActive) => {
         let array = []
 
-        //console.log(maxScore)
-        if (selectedScore && selectedScore.valueNum) {
-            let space = selectedScore.valueNum / 20
-
+        if (scoreActive) {
+            let space = scoreActive / 10
             for (let i = 1; i <= 10; i++) {
                 let score = space * i
 
-                array.push(score)
+                array.push(score.toFixed(3))
+            }
+        } else {
+            if (selectedScore && selectedScore.valueNum) {
+                let space = selectedScore.valueNum / 10
+                for (let i = 1; i <= 10; i++) {
+                    let score = space * i
+
+                    array.push(score)
+                }
             }
         }
 
         return array
     }
 
+    // useEffect(() => {
+    //     let array = buildScoreQuestion()
+    //     setScoreQuestion([...array])
+    // }, [selectedScore])
+
     useEffect(() => {
-        let array = buildScoreQuestion()
-        setScoreQuestion([...array])
-    }, [selectedScore])
+        //let array = buildScoreQuestion()
+
+        let resultScore = selectedScore && selectedScore.valueNum / listQuestions.length
+
+        let arrayListScore = buildScoreQuestion(resultScore)
+
+        setScoreQuestion([...arrayListScore])
+
+        setScoreInitQuestion(resultScore)
+
+        //setScoreQuestion([...array])
+    }, [selectedScore, listQuestions.length])
 
     //handle children component
 
@@ -254,9 +277,9 @@ function EditExam(props) {
             listQuestions.map((item, index) => {
                 return (
                     <QuestionItem
-                        isScroll
                         isValid={isValid}
-                        maxScore={selectedScore}
+                        scoreInitQuestion={scoreInitQuestion}
+                        maxScore={selectedScore && selectedScore.label}
                         listScoreQuestion={scoreQuestion}
                         dataParent={item}
                         isSubmit={isSubmit}
@@ -275,6 +298,7 @@ function EditExam(props) {
     }
 
     let deleteQuestion = (id) => {
+        console.log(id)
         setTypeModal('delete')
         setIsSubmit(true)
         renderQuestion()
@@ -302,18 +326,20 @@ function EditExam(props) {
         setIsSubmit(true)
 
         renderQuestion()
-
         let isCheck = true
-        //console.log(typeof bool)
+        //if (!fixShowError) {
         if (typeof bool !== 'boolean') {
             isCheck = false
+
             setFix(Math.random())
+            return
         } else {
             if (bool === false) {
                 //console.log(bool)
                 isCheck = false
             }
         }
+        //}
 
         if (title.length <= 0) {
             setErrTitle('crud-exam.error-title')
@@ -328,20 +354,26 @@ function EditExam(props) {
         } else {
             setErrDescription('')
         }
-
+        //console.log(listQuestions)
         let total = 0
         let errScoreTotal = false
-
         for (let i = 0; i < listQuestions.length; i++) {
             total += +listQuestions[i].score
-            let checkAnswerTrue = false
-            listQuestions[i].answers.forEach((item) => {
-                if (item.isAnswerTrue) {
-                    checkAnswerTrue = true
-                }
-            })
 
-            if (!checkAnswerTrue) {
+            if (!listQuestions[i].title) {
+                isCheck = false
+            }
+            let activeScoreChech = false
+            for (let j = 0; j < listQuestions[i].answers.length; j++) {
+                if (!listQuestions[i].answers[j].title) {
+                    isCheck = false
+                }
+
+                if (listQuestions[i].answers[j].isAnswerTrue) {
+                    activeScoreChech = true
+                }
+            }
+            if (!activeScoreChech) {
                 isCheck = false
             }
         }
@@ -351,21 +383,25 @@ function EditExam(props) {
             errScoreTotal = true
         }
 
-        if (!isCheck) {
+        if (isCheck) {
+            if (dataExam.data.typeExam !== typeExam) {
+                setDescriptionModal(t('crud-exam.different-type'))
+            } else {
+                setDescriptionModal(t('crud-exam.do-save-exam'))
+            }
+            setError('')
+            setIsSubmit(false)
+            setIsOpenModal(true)
+
+            setIsSubmit(true)
+            renderQuestion()
+            setTypeModal('submit')
+        } else {
             if (!errScoreTotal) {
                 setError('crud-exam.error-missing')
             } else {
                 setError('crud-exam.error-total')
             }
-            // toast.error(t('crud-exam.toast-miss'))
-        } else {
-            setError('')
-            setIsSubmit(false)
-            setIsOpenModal(true)
-            setDescriptionModal(t('crud-exam.do-save-exam'))
-            setIsSubmit(true)
-            renderQuestion()
-            setTypeModal('submit')
         }
 
         //console.log(listQuestions)
@@ -385,7 +421,7 @@ function EditExam(props) {
     let handleDeleteQuestion = async (id) => {
         if (listQuestions && listQuestions.length > 0) {
             let array = listQuestions
-            let fix = array.filter((item) => item.id !== id)
+            let fix = array.filter((item) => item.questionId !== id)
 
             setListQuestions([...fix])
 
@@ -405,10 +441,12 @@ function EditExam(props) {
     // }
 
     let handleFinnal = async () => {
+        let newDate = new Date()
+        newDate.setHours(23, 59, 59, 0)
         //console.log(selectedTime)
         let data = {
             examID: examId,
-            //userID: userInfor._id,
+            //email: userInfor._id,
             password: password,
             title: title,
             score: selectedScore,
@@ -419,22 +457,25 @@ function EditExam(props) {
             typeAnswer: typeAnswer,
             questions: listQuestions,
             image: file,
-            quantityJoin: dataExam.data ? dataExam.data.quantityJoin : 0,
+            dateExam: dataExam.data.dateExam ? dataExam.data.dateExam : newDate,
+            quantityJoin: dataExam.data.quantityJoin ? dataExam.data.quantityJoin : 0,
+            dateExamUpdate: newDate,
         }
 
         //console.log(data)
 
         let respon = await examService.updateExamById(data)
         if (respon && respon.errCode === 0) {
-            toast.success(respon.message)
-        }
-        console.log(user)
-
-        if (user.userInfo.roleID === 'R1') {
-            navigate(`/admin/manageExam`)
+            toast.success(t('toast.update-success'))
+            if (user.userInfo.roleID === 'R1') {
+                navigate(`/admin/manageExam`)
+            } else {
+                navigate(`/myExam`)
+            }
         } else {
-            navigate(`/myExam`)
+            toast.error(t('toast.update-fail'))
         }
+        //console.log(user)
 
         setIsOpenModal(false)
         setDescriptionModal('')
@@ -452,10 +493,19 @@ function EditExam(props) {
         }
     }
 
+    function generateRandomString(length) {
+        var result = ''
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * characters.length))
+        }
+        return result
+    }
+
     //console.log(selectedScore)
     return (
         <>
-            <AdminNavigation />
+            <HeaderHome />
             <div className="create-exam-container">
                 <div className="create-exam-content">
                     <div className="header">
@@ -576,6 +626,14 @@ function EditExam(props) {
                                     </div>
                                     <span>{t('crud-exam.text-hide')}</span>
                                 </div>
+                            </div>
+                            <div className="col-12 password">
+                                <span className="title-password">{t('crud-exam.password')}</span>
+
+                                <span classsName="key-password">{password}</span>
+                                <button onClick={() => setPassword(generateRandomString(6))} className="btn-password">
+                                    {t('crud-exam.change-password')}
+                                </button>
                             </div>
 
                             <div className="img-body">

@@ -82,7 +82,12 @@ function Verification() {
                     <div className="verification-info">
                         <div className="verification-header">
                             <div className="verify-nav">
-                                <img className="img-exam" src={exam && exam.data && exam.data.image} alt="" />
+                                {exam && exam.data && exam.data.image ? (
+                                    <img className="img-exam" src={exam && exam.data && exam.data.image} alt="" />
+                                ) : (
+                                    <></>
+                                )}
+
                                 <h2>{exam && exam.data && exam.data.title}</h2>
                             </div>
                             {showLike && user.userInfo ? (

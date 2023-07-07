@@ -195,6 +195,8 @@
         "notify-no-data": "Chưa có dữ liệu để lọc, vui lòng tìm kiếm bài thi trước"
     },
     "crud-exam": {
+        "change-password": "Thay đổi mật khẩu",
+        "password": "Mật khẩu",
         "add-exam": "Thêm mới bài thi",
         "edit-exam": "Chỉnh sửa bài thi",
         "title-exam": "Tiêu đề bài thi",
@@ -235,7 +237,8 @@
         "remove-success": "Xóa câu hỏi thành công",
         "edit-img-exam": "Thay đổi ảnh bài thi",
         "save-change": "Lưu thay đổi",
-        "toast-miss": "Bạn vẫn chưa nhập 1 vài thông tin bắt buộc, vui lòng kiểm tra lại"
+        "toast-miss": "Bạn vẫn chưa nhập 1 vài thông tin bắt buộc, vui lòng kiểm tra lại",
+        "different-type": "Nếu bạn thay đổi loại bài thi thì dữ liệu người tham gia trước đó sẽ mất hết, bạn chắc chắn chứ?"
     },
     "ratings": {
         "ratings": "Bảng xếp hạng",

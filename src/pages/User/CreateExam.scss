@@ -84,6 +84,31 @@
                     }
                 }
 
+                .password {
+                    display: flex;
+                    gap: 135px;
+                    align-items: center;
+                    .title-password {
+                    }
+
+                    .key-password {
+                        color: #00c6d4;
+                    }
+
+                    .btn-password {
+                        border: 1px solid #ccc;
+                        font-size: 1.8rem;
+                        border-radius: 10px;
+                        padding: 6px 12px;
+                        outline: none;
+                        opacity: 0.8;
+
+                        &:hover {
+                            opacity: 1;
+                        }
+                    }
+                }
+
                 .left {
                     width: 50%;
                     input {

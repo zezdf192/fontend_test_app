@@ -23,12 +23,19 @@ function LikeExamItem({ data }) {
 
     return (
         <div className="like-exam-item">
-            <img
-                className="like-exam-img"
-                onClick={() => hanldeClick(infoExam)}
-                src={infoExam && infoExam.data && infoExam.data.image}
-                alt=""
-            />
+            {infoExam && infoExam.data && infoExam.data.image ? (
+                <img
+                    className="like-exam-img"
+                    onClick={() => hanldeClick(infoExam)}
+                    src={infoExam && infoExam.data && infoExam.data.image}
+                    alt=""
+                />
+            ) : (
+                <div className="span-img-container">
+                    <h3 className="span-img">{infoExam && infoExam.data && infoExam.data.title}</h3>
+                </div>
+            )}
+
             <div className="like-exam-text">
                 <span className="title">{infoExam && infoExam.data && infoExam.data.title}</span>
                 <span className="description">{infoExam && infoExam.data && infoExam.data.description}</span>
