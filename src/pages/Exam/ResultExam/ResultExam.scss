@@ -4,6 +4,10 @@
     flex-direction: column;
     justify-content: center;
 
+    &.private {
+        align-items: center;
+    }
+
     .result-exam-header {
         //max-width: 800px;
         padding: 40px 0;

@@ -80,7 +80,7 @@ function ModalDetailUser({ handleCloseModalDetail, isOpenModal, data, type, rati
                         <span className="detail-title">{t('admin.total-exams-created')}</span>
                         <span>:</span>
                         <span className="detail-description">
-                            {currentUser && currentUser.userCreateID && currentUser.userCreateID.length}
+                            {currentUser && currentUser.amountCreate && currentUser.amountCreate}
                         </span>
                     </div>
                     <div className="col-12">

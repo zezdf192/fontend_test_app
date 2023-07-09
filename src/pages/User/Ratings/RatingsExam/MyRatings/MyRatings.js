@@ -15,6 +15,7 @@ import {
 import examService from '../../../../../service/examService'
 import ModalDetailUser from '../../../../Admin/ModalDetailUser/ModalDetailUser'
 import ReactPaginate from 'react-paginate'
+import Spiner from '../../../../../component/Spiner/Spiner'
 
 function MyRatings({ listMyRating }) {
     const { examId } = useParams()
@@ -161,7 +162,7 @@ function MyRatings({ listMyRating }) {
             listMyRatings.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
         setNewListExam(slicedData)
     }, [listMyRatings, currentPage])
-    console.log(newListExam)
+
     return (
         <>
             {listMyRatings && listMyRatings.length > 0 && (
@@ -262,6 +263,7 @@ function MyRatings({ listMyRating }) {
                     />
                 </div>
             )}
+
             {isOpenModalDetail && (
                 <ModalDetailUser
                     data={currentUser && currentUser.exam}

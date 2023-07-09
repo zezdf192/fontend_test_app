@@ -36,6 +36,7 @@ import FilterRatings from '../../../../component/Filter/FilterRatings/FilterRati
 import { toast } from 'react-toastify'
 import MyRatings from './MyRatings/MyRatings'
 import ReactPaginate from 'react-paginate'
+import Spiner from '../../../../component/Spiner/Spiner'
 
 function RatingsExam() {
     const { examId } = useParams()
@@ -43,6 +44,8 @@ function RatingsExam() {
     const language = useSelector((state) => state.app.language)
     let navigate = useNavigate()
     const user = useSelector((state) => state.user)
+
+    const [loadingApi, setLoadingApi] = useState(false)
 
     const [currentPage, setCurrentPage] = useState(0)
     const [itemsPerPage, setItemsPerPage] = useState(5)
@@ -91,6 +94,7 @@ function RatingsExam() {
     useEffect(() => {
         if (examId !== 'examId') {
             async function callAPI() {
+                setLoadingApi(true)
                 let respon = await examService.getDetailExamRatings(examId)
 
                 if (respon && respon.errCode === 0) {
@@ -102,6 +106,7 @@ function RatingsExam() {
                     }
                     //console.log(respon.data.users)
                 }
+                setLoadingApi(false)
             }
 
             callAPI()
@@ -199,12 +204,14 @@ function RatingsExam() {
     }
 
     let updateListDoExam = (data) => {
+        setCurrentPage(0)
         setListUserDoExam(data)
     }
 
     //my ratings
 
     let handleToMyRatings = async () => {
+        setLoadingApi(true)
         let respon = await examService.getAllDoExamRatings(user.userInfo.email)
 
         if (respon && respon.errCode === 0) {
@@ -232,6 +239,7 @@ function RatingsExam() {
 
             // console.log(listIndexRatings)
         }
+        setLoadingApi(false)
     }
 
     let handlePageChange = (selectedPage) => {
@@ -412,6 +420,7 @@ function RatingsExam() {
                                         onPageChange={handlePageChange}
                                         containerClassName={'pagination'}
                                         activeClassName={'active'}
+                                        forcePage={currentPage}
                                     />
                                 </div>
                             ) : (
@@ -421,6 +430,7 @@ function RatingsExam() {
                     </div>
                 </div>
             </div>
+            <Spiner loading={loadingApi} />
             {isOpenModalDetail && (
                 <ModalDetailUser
                     data={currentUser}

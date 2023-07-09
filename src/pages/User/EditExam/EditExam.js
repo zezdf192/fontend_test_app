@@ -136,12 +136,35 @@ function EditExam(props) {
                         labelVi: item.valueVi,
                         labelEn: item.valueEn,
                         valueNum: item.valueNum,
+                        isDisabled:
+                            selectedLimit && item.keyCode !== 'L0'
+                                ? item.valueNum <= selectedLimit.valueNum
+                                    ? true
+                                    : false
+                                : false,
                     }
                 })
 
             return result
         }
     }
+
+    useEffect(() => {
+        async function getLimit() {
+            let responLimit = await allCodeService.getAllCode('LIMIT')
+
+            if (responLimit && responLimit.errCode === 0) {
+                let limit = buildOption(responLimit.data)
+                if (limit && limit.length > 0) {
+                    //console.log(limit)
+                    //setSelectedLimit(limit[0])
+                    setListLimit(limit)
+                }
+            }
+        }
+
+        getLimit()
+    }, [selectedLimit])
 
     let callAPIWhenChangeLanguage = async () => {
         let responScore = await allCodeService.getAllCode('SCORE')
@@ -156,7 +179,6 @@ function EditExam(props) {
                 setListScore(score)
             }
         }
-
         if (responLimit && responLimit.errCode === 0) {
             let limit = buildOption(responLimit.data)
             if (limit && limit.length > 0) {
@@ -164,7 +186,6 @@ function EditExam(props) {
                 setListLimit(limit)
             }
         }
-
         if (responTime && responTime.errCode === 0) {
             let time = buildOption(responTime.data, 'time')
             if (time && time.length > 0) {
@@ -178,13 +199,15 @@ function EditExam(props) {
         let copySelectedLimit = selectedLimit
         let copySelectedTime = selectedTime
 
-        copySelectedScore.label = language === 'en' ? copySelectedScore.labelEn : copySelectedScore.labelVi
-        copySelectedLimit.label = language === 'en' ? copySelectedLimit.labelEn : copySelectedLimit.labelVi
-        copySelectedTime.label = language === 'en' ? copySelectedTime.labelEn : copySelectedTime.labelVi
+        if (copySelectedScore && copySelectedLimit && copySelectedTime) {
+            copySelectedScore.label = language === 'en' ? copySelectedScore.labelEn : copySelectedScore.labelVi
+            copySelectedLimit.label = language === 'en' ? copySelectedLimit.labelEn : copySelectedLimit.labelVi
+            copySelectedTime.label = language === 'en' ? copySelectedTime.labelEn : copySelectedTime.labelVi
 
-        setSelectedScore(copySelectedScore)
-        setSelectedLimit(copySelectedLimit)
-        setSelectedTime(copySelectedTime)
+            setSelectedScore(copySelectedScore)
+            setSelectedLimit(copySelectedLimit)
+            setSelectedTime(copySelectedTime)
+        }
     }
 
     let callAPI = async () => {
@@ -195,6 +218,7 @@ function EditExam(props) {
             //console.log(data)
             let copyScore = data.data.score
             let copyLimit = data.data.limit
+            //copyLimit.isDisabled = data.data.limit.valueNum < data.data.quantityJoin
             let copyTime = data.data.time
 
             copyScore.label = language === 'en' ? copyScore.labelEn : copyScore.labelVi
@@ -543,6 +567,7 @@ function EditExam(props) {
                                             onChange={handleChangeLimit}
                                             options={listLimit}
                                             isSearchable
+                                            isOptionDisabled={(option) => option.isDisabled}
                                         />
                                     </div>
                                     <div className="col-4 mt-5">

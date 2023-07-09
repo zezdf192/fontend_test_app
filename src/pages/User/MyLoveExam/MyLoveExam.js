@@ -13,12 +13,15 @@ import { path } from '../../../until/constant'
 
 import './MyLoveExam.scss'
 import ReactPaginate from 'react-paginate'
+import Spiner from '../../../component/Spiner/Spiner'
 
 function MyLoveExam() {
     const { t } = useTranslation()
     const language = useSelector((state) => state.app.language)
     let navigate = useNavigate()
     const user = useSelector((state) => state.user)
+
+    const [loadingApi, setLoadingApi] = useState(false)
 
     const [currentPage, setCurrentPage] = useState(0)
     const [itemsPerPage, setItemsPerPage] = useState(2)
@@ -28,11 +31,12 @@ function MyLoveExam() {
 
     useEffect(() => {
         const callAPI = async () => {
+            setLoadingApi(true)
             let respon = await userService.getAllExamUserLike({ email: user.userInfo.email })
-
             if (respon && respon.errCode === 0) {
                 setListLikeExam(respon.data)
             }
+            setLoadingApi(false)
         }
 
         callAPI()
@@ -100,6 +104,7 @@ function MyLoveExam() {
                     </div>
                 </div>
             </div>
+            <Spiner loading={loadingApi} />
         </>
     )
 }

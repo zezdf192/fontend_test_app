@@ -19,8 +19,11 @@ import ButtonNotify from '../../../component/ButtonNotify/ButtonNotify'
 import WrapperPoper from '../../User/Ratings/WrapperPoper/WrapperPoper'
 import UserMenu from './UserMenu/UserMenu'
 import nonAvatar from '../../../styles/svg/avatar.jpg'
+import { path } from '../../../until/constant'
 
-function HeaderHome() {
+let copyFunction = () => {}
+
+function HeaderHome({ changeElement = copyFunction, doExam = false }) {
     const { t } = useTranslation()
     const user = useSelector((state) => state.user)
     const app = useSelector((state) => state.app.language)
@@ -53,7 +56,7 @@ function HeaderHome() {
             <div className="headerhome-container">
                 <div className="nav-body">
                     <div className="content-left">
-                        <Link to="/" className="title">
+                        <Link onClick={(e) => changeElement(e, path.home)} to={path.home} className="title">
                             ExamApp
                         </Link>
                     </div>
@@ -63,7 +66,7 @@ function HeaderHome() {
                             Quản lý người dùng
                         </NavLink> */}
                             {user && user.userInfo ? (
-                                <NavLink to="/myExam" className="item">
+                                <NavLink to="/myExam" onClick={(e) => changeElement(e, path.myExam)} className="item">
                                     {t('home-page.your-exam')}
                                 </NavLink>
                             ) : (
@@ -93,7 +96,7 @@ function HeaderHome() {
                                         render={(attrs) => (
                                             <div className="box" style={{ minWidth: '230px' }} tabIndex="-1" {...attrs}>
                                                 <WrapperPoper>
-                                                    <UserMenu />
+                                                    <UserMenu doExam={doExam} changeElement={changeElement} />
                                                 </WrapperPoper>
                                             </div>
                                         )}

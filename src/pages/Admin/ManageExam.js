@@ -42,33 +42,9 @@ function ManageExam() {
     const [currentDelete, setCurrentDelete] = useState()
 
     //filter
-    const [keywordSearch, setKeywordSearch] = useState('')
-
-    const [arrayTableTitles, setArrayTableTitles] = useState([
-        {
-            key: 'name',
-            status: 'up',
-            value: t('admin.author'),
-        },
-        {
-            key: 'title',
-            status: 'up',
-            value: t('admin.exam-title'),
-        },
-        {
-            key: 'limit',
-            status: 'up',
-            value: t('admin.maximum-attempts'),
-        },
-        {
-            key: 'time',
-            status: 'up',
-            value: t('admin.exam-duration'),
-        },
-    ])
 
     const [dataSearch, setDataSearch] = useState({
-        userID: user.userInfo._id,
+        email: user.userInfo.email,
         nameExam: '',
         currentJoin: null,
         typeCurrentJoin: 'greater',
@@ -127,11 +103,9 @@ function ManageExam() {
         setDescriptionModal('')
     }
 
-    let changeKeyWordSearch = (data) => {
-        setKeywordSearch(data)
-    }
-
     let updateListDoExam = (data) => {
+        setCurrentPage(0)
+
         setListExam(data)
     }
 
@@ -168,11 +142,13 @@ function ManageExam() {
                         <div className="filter">
                             {/* <FontAwesomeIcon className="icon-filter" icon={faFilter} /> */}
                             <FilterExam
+                                style={{ top: '26px' }}
+                                type="admin"
                                 isOpenFilter={isOpenFilter}
                                 showModal={showModalFilter}
                                 changeDataSearch={changeDataSearch}
                                 // type="manageExam"
-                                changeKeyWordSearch={changeKeyWordSearch}
+
                                 updateListDoExam={updateListDoExam}
                                 children={<span className="search">{t('content-your-exam.filter-exam')}</span>}
                             />
@@ -257,6 +233,7 @@ function ManageExam() {
                                 onPageChange={handlePageChange}
                                 containerClassName={'pagination'}
                                 activeClassName={'active'}
+                                forcePage={currentPage}
                             />
                         </div>
                     </div>

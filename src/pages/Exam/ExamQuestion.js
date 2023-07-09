@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
 import './ExamQuestion.scss'
 
 function ExamQuestion({
@@ -10,6 +12,7 @@ function ExamQuestion({
     changeListAnswerChoose,
     listAnswerChoose,
 }) {
+    const { t } = useTranslation()
     const [exam, setExam] = useState()
     const [chooseAnswer, setChooseAnswer] = useState([])
 
@@ -46,10 +49,12 @@ function ExamQuestion({
             <div className="exam-question-body">
                 <div className="header">
                     <h2 className="title">
-                        Câu hỏi số {questionActive + 1}:{' '}
+                        {t('start-exam.question')} {questionActive + 1}:{' '}
                         <span style={{ marginLeft: '10px' }}> {examInfo && examInfo.title}</span>
                     </h2>
-                    <span className="score">{examInfo && examInfo.score} điểm</span>
+                    <span className="score">
+                        {examInfo && examInfo.score} {t('start-exam.score')}
+                    </span>
                 </div>
                 <div className="img">
                     <img src={examInfo && examInfo.image} alt=""></img>

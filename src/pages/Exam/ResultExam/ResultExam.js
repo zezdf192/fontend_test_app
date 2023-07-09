@@ -52,7 +52,11 @@ function ResultExam() {
     return (
         <>
             <HeaderHome />
-            <div className="result-exam-container">
+            <div
+                className={
+                    typeAnswer && typeAnswer === 'PUBLIC' ? 'result-exam-container' : 'result-exam-container private'
+                }
+            >
                 <div
                     className={
                         typeAnswer && typeAnswer === 'PUBLIC' ? 'result-exam-header' : 'result-exam-header private'

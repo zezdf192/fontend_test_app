@@ -23,7 +23,7 @@ import HeaderHome from '../../HomePage/HeaderHome/HeaderHome'
 import Button from '../../../component/ButtonNotify/ButtonNotify'
 import './MyExam.scss'
 import { path } from '../../../until/constant'
-import imgNoData from '../../../styles/svg/no-data.png'
+
 import examService from '../../../service/examService'
 import { sideBarUser } from '../../../component/RouteSideBar/routeSideBar'
 import SideBar from './SideBar/SideBar'
@@ -31,6 +31,8 @@ import FilterExam from '../../../component/Filter/FilterExam/FilterExam'
 import ModalDetailUser from '../../Admin/ModalDetailUser/ModalDetailUser'
 import ModalNotify from '../../../component/Modal/ModalNotify'
 import { toast } from 'react-toastify'
+import NotFoundData from '../../../component/NotFoundData/NotFoundData'
+import Spiner from '../../../component/Spiner/Spiner'
 
 function MyExam() {
     const { t } = useTranslation()
@@ -38,6 +40,7 @@ function MyExam() {
     let navigate = useNavigate()
     const user = useSelector((state) => state.user)
 
+    const [loadingApi, setLoadingApi] = useState(false)
     //filter
     const [isOpenFilter, setIsOpenFilter] = useState(false)
     const [dataSearch, setDataSearch] = useState({
@@ -86,6 +89,7 @@ function MyExam() {
     ])
 
     let callAPI = async () => {
+        setLoadingApi(true)
         let respon = await examService.getAllExamByUserId({ email: user.userInfo.email })
 
         if (respon && respon.errCode === 0) {
@@ -93,6 +97,7 @@ function MyExam() {
             setHidden(Array(respon.data.length).fill(true))
             setListExam(respon.data)
         }
+        setLoadingApi(false)
     }
 
     useEffect(() => {
@@ -150,6 +155,7 @@ function MyExam() {
 
     //filer
     let updateListDoExam = (data) => {
+        setCurrentPage(0)
         setListExam(data)
     }
 
@@ -216,11 +222,13 @@ function MyExam() {
     }
 
     useEffect(() => {
+        //setLoadingApi(true)
         let slicedData =
             listExam &&
             listExam.length > 0 &&
             listExam.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
         setNewListExam(slicedData)
+        //setLoadingApi(false)
     }, [listExam, currentPage])
 
     return (
@@ -364,23 +372,20 @@ function MyExam() {
                                             onPageChange={handlePageChange}
                                             containerClassName={'pagination'}
                                             activeClassName={'active'}
+                                            forcePage={currentPage}
                                         />
                                     </div>
                                 </>
                             ) : (
                                 <>
-                                    <div className="img-nodata-container">
-                                        <div className="img-nodata-body">
-                                            <img src={imgNoData} alt="" />
-                                            <span>{t('not-found.no-data')}</span>
-                                        </div>
-                                    </div>
+                                    <NotFoundData />
                                 </>
                             )}
                         </>
                     </div>
                 </div>
             </div>
+            <Spiner loading={loadingApi} />
             {isOpenModal && (
                 <ModalNotify
                     typeModal="exam"

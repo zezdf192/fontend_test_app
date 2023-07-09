@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import Select from 'react-select'
 import AdminNavigation from '../Admin/Navigation/AdminNavigation'
+import { useNavigate } from 'react-router-dom'
 
 import QuestionItem from './QuestionItem/QuestionItem'
 
@@ -24,6 +25,8 @@ function CreateExam() {
     const { t } = useTranslation()
     const language = useSelector((state) => state.app.language)
     const user = useSelector((state) => state.user)
+
+    let navigate = useNavigate()
 
     function generateRandomString(length) {
         var result = ''
@@ -417,6 +420,7 @@ function CreateExam() {
         let respon = await examService.createNewExam(data)
         if (respon && respon.errCode === 0) {
             toast.success(respon.message)
+            navigate('/myExam')
         }
 
         setIsOpenModal(false)

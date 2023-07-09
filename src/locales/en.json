@@ -51,7 +51,10 @@
         "hello": "Hello {{name}}!",
         "exam-popular": "Some typical exam questions",
         "exam-participated": "The exam you participated in",
-        "user-infor": "The information about you"
+        "user-infor": "The information about you",
+        "out": "Out",
+        "limit": "limit",
+        "exam": "Exams"
     },
     "content-your-exam": {
         "compilation-exams-participated": "Compilation of exams you have participated in",
@@ -68,6 +71,7 @@
         "add-exam": "Add new exam"
     },
     "verifi": {
+        "maximum-limit": "The exam has reached the maximum participation limit",
         "time": "Time: ",
         "number-questions": "Number of questions: ",
         "description": "Description of the exam: ",
@@ -92,6 +96,11 @@
         "user-exam-information": "User exam information",
         "notification": "Notification",
         "log-out": "Do you want to log out?",
+        "submit-exam": "Are you sure you want to submit the exam?",
+
+        "out-time": "You have run out of time for the exam. Press the confirmation button to view your results.",
+        "unanswered-questions": "You still have unanswered questions. Are you sure you want to submit your exam?",
+        "new-link": "If you navigate to a new link, your exam progress will not be saved. Do you want to continue?",
         "delete-user": "Are you sure you want to delete this user?",
         "close": "Close",
         "confirm": "Confirm",
@@ -161,6 +170,15 @@
     "filter-exam": {
         "filter-data": "Data filtering",
         "search-title": "Search by exam title",
+        "search-auth": "Search by auth",
+        "search-auth-name": "Search by exam auth's name",
+        "search-auth-email": "Search by exam auth's email",
+        "exams-author": "Number of exams by the author",
+        "number-exams": "Number of exams",
+        "name-user": "Username",
+
+        "auth-email": "Auth's email",
+        "auth": "Auth's name",
         "search-attempt": "Search by number of exam entries",
         "greater": "Greater than or equal",
         "less": "Less than or equal",
@@ -316,5 +334,19 @@
         "s": "s",
         "change-password": "Change password",
         "new-password": "Enter a new password"
+    },
+    "redux": {
+        "register-success": "Register success",
+        "register-fail": "Register fail"
+    },
+    "start-exam": {
+        "question": "Question",
+        "exam": "Exam's name: ",
+        "unlimited": "Unlimited time",
+        "exit": "Exit",
+        "submit": "Submit",
+        "time-up": "Time's up",
+        "score": "score",
+        "no-attempts": "No more participation attempts available"
     }
 }

@@ -51,7 +51,10 @@
         "hello": "Xin chào {{name}}!",
         "exam-popular": "Một số bài thi tiêu biểu",
         "exam-participated": "Bài thi bạn đã tham gia",
-        "user-infor": "Thông tin của bạn"
+        "user-infor": "Thông tin của bạn",
+        "out": "Hết",
+        "limit": "lượt",
+        "exam": "lượt"
     },
     "content-your-exam": {
         "compilation-exams-participated": "Tổng hợp bài thi bạn đã tham gia",
@@ -68,6 +71,8 @@
         "add-exam": "Thêm mới bài thi"
     },
     "verifi": {
+        "maximum-limit": "Bài thi đã hết số lượt tham gia",
+
         "time": "Thời gian thi: ",
         "number-questions": "Số lượng câu hỏi: ",
         "description": "Mô tả bài thi: ",
@@ -93,7 +98,10 @@
         "delete-user": "Bạn có xác nhận xóa người dùng không?",
         "notification": "Thông báo",
         "log-out": "Bạn có muốn đăng xuất không?",
-
+        "submit-exam": "Bạn có xác nhận nộp bài thi?",
+        "out-time": "Bạn đã hết thời gian làm bài thi, bấm nút xác nhận để xem kết quả bài làm.",
+        "unanswered-questions": "Vẫn còn câu hỏi bạn chưa chọn đáp án, bạn vẫn muốn nộp bài?",
+        "new-link": "Nếu chuyển tới liên kết mới, bài thi của bạn sẽ không được lưu, bạn có tiếp tục?",
         "close": "Đóng",
         "confirm": "Xác nhận",
         "author-email": "Email tác giả",
@@ -122,8 +130,8 @@
         "exam-date": "Ngày làm bài thi",
         "most-recent-exam-date": "Ngày gần nhất làm bài thi",
         "count-correct-responses": "Số lượng câu trả lời đúng",
-        "update-user-success": "Update user success",
-        "update-user-fail": "Update user fail"
+        "update-user-success": "Cập nhật thành công",
+        "update-user-fail": "Cập nhật thất bại"
     },
     "tippy": {
         "detail-exam": "Xem chi tiết bài thi",
@@ -164,6 +172,14 @@
     "filter-exam": {
         "filter-data": "Lọc dữ liệu",
         "search-title": "Tìm kiếm theo tên bài thi",
+        "search-auth": "Tìm kiếm theo tên tác giả",
+        "search-auth-name": "Tìm kiếm theo tên người dùng",
+        "name-user": "Tên người dùng",
+        "search-auth-email": "Tìm kiếm theo email người dùng",
+        "exams-author": "Số bài thi của người dùng",
+        "number-exams": "Số bài thi",
+        "auth-email": "Email người dùng",
+        "auth": "Tên tác giả",
         "search-attempt": "Tìm kiếm theo số lượt thi hiện tại",
         "greater": "Lớn hơn hoặc bằng",
         "less": "Nhỏ hơn hoặc bằng",
@@ -320,5 +336,19 @@
         "s": "giây",
         "change-password": "Thay đổi mật khẩu",
         "new-password": "Nhập mật khẩu mới"
+    },
+    "redux": {
+        "register-success": "Đăng ký thành công",
+        "register-fail": "Đăng ký thất bại"
+    },
+    "start-exam": {
+        "question": "Câu hỏi số",
+        "exam": "Bài thi: ",
+        "unlimited": "Không giới hạn thời gian",
+        "exit": "Thoát",
+        "submit": "Nộp bài",
+        "time-up": "Hết thời gian",
+        "score": "điểm",
+        "no-attempts": "Hết lượt tham gia"
     }
 }

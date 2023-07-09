@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
+
 import './Verification.scss'
 import examService from '../../service/examService'
 
@@ -10,12 +11,15 @@ import { useTranslation } from 'react-i18next'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import userService from '../../service/userService'
+import Spiner from '../Spiner/Spiner'
 
 function Verification() {
     const { examId, email, nameUser } = useParams()
     const user = useSelector((state) => state.user)
     const language = useSelector((state) => state.app.language)
     const { t } = useTranslation()
+
+    const [loadingApi, setLoadingApi] = useState(false)
 
     const [exam, setExam] = useState()
     const [isLike, setIsLike] = useState()
@@ -34,6 +38,7 @@ function Verification() {
     }
 
     let callAPI = async () => {
+        setLoadingApi(true)
         let respon = await examService.getDetailExamById(examId)
         // console.log('examId', examId)
         // let respon = await examService.getDetailExamPrivateForVerify({
@@ -51,6 +56,7 @@ function Verification() {
         if (respon && respon.errCode === 0) {
             setExam(respon.data.exam)
         }
+        setLoadingApi(false)
     }
 
     useEffect(() => {
@@ -74,9 +80,28 @@ function Verification() {
         setIsLike(!isLike)
     }
 
+    let buildOverLimit = (data) => {
+        if (data.limit.value !== 'L0') {
+            if (data.limit.valueNum === data.quantityJoin) {
+                return (
+                    <>
+                        <span className="no-limit"> {t('verifi.maximum-limit')}</span>
+                    </>
+                )
+            }
+        }
+
+        return (
+            <button onClick={handleStartExam} className="btn-next">
+                {t('verifi.start')}
+            </button>
+        )
+    }
+
     return (
         <>
             <HeaderHome />
+
             <div className="verification-container">
                 <div className="verification-body">
                     <div className="verification-info">
@@ -116,7 +141,7 @@ function Verification() {
                             <p>
                                 {t('verifi.like-count')}
 
-                                {exam && exam.data && exam.data.quantityLike && exam.data.quantityLike.length}
+                                {exam && exam.data && exam.data.quantityLike ? exam.data.quantityLike.length : 0}
                             </p>
                         ) : (
                             <></>
@@ -132,14 +157,14 @@ function Verification() {
                             <button onClick={handleBackHome} className="btn-close-verify">
                                 {t('verifi.back')}
                             </button>
-                            <button onClick={handleStartExam} className="btn-next">
-                                {t('verifi.start')}
-                            </button>
+                            {exam && exam.data && buildOverLimit(exam.data)}
                         </div>
                         {!user.userInfo ? <span className="note"> {t('verifi.note')}</span> : <></>}
                     </div>
                 </div>
             </div>
+
+            <Spiner loading={loadingApi} />
         </>
     )
 }

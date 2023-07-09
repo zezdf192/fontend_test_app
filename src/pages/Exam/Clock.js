@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+
 import './Clock.scss'
 function Clock({ examInfo, handleSubmitExam }) {
+    const { t } = useTranslation()
     const [countdown, setCountdown] = useState('')
 
     let handleTimeUp = () => {
@@ -38,7 +41,7 @@ function Clock({ examInfo, handleSubmitExam }) {
 
     return (
         <div className="countdown-timer">
-            <p>{examInfo.value === 'T0' ? 'Không giới hạn thời gian' : countdown}</p>
+            <p>{examInfo.value === 'T0' ? t('start-exam.unlimited') : countdown}</p>
         </div>
     )
 }

@@ -9,7 +9,7 @@ import { fetchLogOut } from '../../../../store/action/userAction'
 import ModalNotify from '../../../../component/Modal/ModalNotify'
 import { useState } from 'react'
 
-function UserMenu() {
+function UserMenu({ changeElement, doExam }) {
     const { t } = useTranslation()
     const user = useSelector((state) => state.user)
     const app = useSelector((state) => state.app.language)
@@ -24,7 +24,11 @@ function UserMenu() {
         navigate('/login')
     }
 
-    let handleLogOut = () => {
+    let handleLogOut = (e) => {
+        if (doExam) {
+            changeElement(e, `/login`)
+            return
+        }
         setIsOpenModal(true)
         setDescriptionModal('modal.log-out')
     }
@@ -46,11 +50,17 @@ function UserMenu() {
                 </div>
                 <div className="user-menu-body">
                     <div className="user-meu-item" style={{ marginTop: '12px' }}>
-                        <Link to={`/settings/personal`}>{t('detail-user.setting')}</Link>
+                        <Link onClick={(e) => changeElement(e, `/settings/personal`)} to={`/settings/personal`}>
+                            {t('detail-user.setting')}
+                        </Link>
                     </div>
                     <div className="user-meu-item">
-                        <Link to={path.myExam}>{t('detail-user.my-exam')}</Link>
-                        <Link to={path.myLoveExam}>{t('detail-user.favorite-exam')}</Link>
+                        <Link onClick={(e) => changeElement(e, path.myExam)} to={path.myExam}>
+                            {t('detail-user.my-exam')}
+                        </Link>
+                        <Link onClick={(e) => changeElement(e, path.myLoveExam)} to={path.myLoveExam}>
+                            {t('detail-user.favorite-exam')}
+                        </Link>
                     </div>
 
                     <div className="user-meu-item" style={{ marginBottom: '0' }}>

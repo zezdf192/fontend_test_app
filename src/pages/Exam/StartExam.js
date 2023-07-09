@@ -4,20 +4,27 @@ import HeaderHome from '../HomePage/HeaderHome/HeaderHome'
 import examService from '../../service/examService'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import OutsideClickHandler from 'react-outside-click-handler'
+import { useTranslation } from 'react-i18next'
 
 import './StartExam.scss'
 import ExamQuestion from './ExamQuestion'
 import Clock from './Clock'
 import ListAnswer from './ListAnswer/ListAnswer'
 import ModalExam from './ModalExam/ModalExam'
+import { fetchLogOut } from '../../store/action/userAction'
 
 function StartExam() {
+    const { t } = useTranslation()
     const language = useSelector((state) => state.app.language)
     const { examId, email, nameUser } = useParams()
     let navigate = useNavigate()
     const [exam, setExam] = useState()
     const user = useSelector((state) => state.user)
     const dispatch = useDispatch()
+
+    const [confirmOutside, setConfirmOutside] = useState(false)
+    const [path, setPath] = useState('')
 
     const [examInfo, setExamInfo] = useState()
 
@@ -102,15 +109,15 @@ function StartExam() {
         if (type === 'time-out') {
             setIsOpenModal(true)
             setTypeModal(type)
-            setDescriptionModal('Bạn đã hết thời gian làm bài thi, bấm nút xác nhận để xem kết quả bài làm')
+            setDescriptionModal(t('modal.out-time'))
         } else if (!isCheck) {
             setIsOpenModal(true)
             setTypeModal('submit')
-            setDescriptionModal('Vẫn còn câu hỏi bạn chưa chọn đáp án, bạn vẫn muốn nộp bài?')
+            setDescriptionModal(t('modal.unanswered-questions'))
             return
         } else {
             setTypeModal('submit')
-            setDescriptionModal('Bạn có xác nhận nộp bài thi?')
+            setDescriptionModal(t('modal.submit-exam'))
             setIsOpenModal(true)
         }
     }
@@ -191,9 +198,6 @@ function StartExam() {
                 }
             }
         }
-
-        // console.log('answerTrue', answerTrue)
-        // console.log('myAnswer', myAnswer)
 
         let dem = 0
         for (let i = 0; i < answerTrue.length; i++) {
@@ -283,12 +287,34 @@ function StartExam() {
         setListAnswerChoose([...newArray])
     }
 
+    let submitOutside = (e) => {
+        setDescriptionModal('')
+        setIsOpenModal(false)
+
+        if (path === '/login') {
+            dispatch(fetchLogOut())
+        }
+
+        navigate(path)
+    }
+
+    let changeElement = (e, path) => {
+        setPath(path)
+        setTypeModal('outside')
+        setDescriptionModal(t('modal.new-link'))
+        setIsOpenModal(true)
+        e.preventDefault()
+    }
+
     return (
         <>
-            <HeaderHome />
+            <HeaderHome doExam={true} changeElement={changeElement} />
+
             <div className="start-exam-container">
                 <div className="start-exam-body">
-                    <h2 className="title">Bài thi: {examInfo && examInfo.data && examInfo.data.title}</h2>
+                    <h2 className="title">
+                        {t('start-exam.exam')} {examInfo && examInfo.data && examInfo.data.title}
+                    </h2>
                     <div className="start-exam-content">
                         <div className="content-left">
                             <ExamQuestion
@@ -308,7 +334,7 @@ function StartExam() {
                                     examInfo={examInfo && examInfo.data && examInfo.data.time && examInfo.data.time}
                                 />
                             ) : (
-                                <div className="no-time">Không giới hạn thời gian</div>
+                                <div className="no-time"> {t('start-exam.unlimited')}</div>
                             )}
 
                             <ListAnswer
@@ -323,13 +349,14 @@ function StartExam() {
                     </div>
                     <div className="action-submit">
                         <button onClick={handleSubmitExam} className="submit">
-                            Nộp bài
+                            {t('start-exam.submit')}
                         </button>
-                        <button className="close">Thoát</button>
                     </div>
                 </div>
             </div>
+
             <ModalExam
+                submitOutside={submitOutside}
                 type={typeModal}
                 handleSubmitModal={handleSubmitModal}
                 isOpenModal={isOpenModal}

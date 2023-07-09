@@ -42,7 +42,7 @@ export const fetchUserLogin = (data, check) => {
 export const createNewUser = (data) => {
     return async (dispatch, getState) => {
         try {
-            console.log('create', data)
+            //console.log('create', data)
             let res = await userService.createNewUser(data)
             //console.log(res)
             let buildData = {
@@ -56,13 +56,13 @@ export const createNewUser = (data) => {
                 userExamID: [],
             }
             if (res && res.errCode === 0) {
-                toast.success(res.message)
+                //toast.success('')
                 dispatch({
                     type: actionTypes.FETCH_USER_SIGNUP,
                     userInfo: buildData,
                 })
             } else {
-                toast.error(res.message)
+                //toast.error(res.message)
                 // dispatch({
                 //     type: actionTypes.USER_SIGNUP_FAIL,
                 // })

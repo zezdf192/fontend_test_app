@@ -61,6 +61,10 @@ const changePassword = (data) => {
     return axios.post(`/api/change-password`, data)
 }
 
+const filterUserByAdmin = (data) => {
+    return axios.post(`/api/filter-user-by-admin`, data)
+}
+
 export default {
     login,
     createNewUser,
@@ -76,4 +80,5 @@ export default {
     getAllExamUserLike,
     getCodeForgotPassword,
     changePassword,
+    filterUserByAdmin,
 }

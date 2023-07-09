@@ -77,9 +77,10 @@ function ModalEditUser({ isOpenModal, handleCloseModalEdit, data, handleSubmitMo
         let valid = handleValidate()
 
         if (valid.isCheck) {
-            let respon = await userService.updateUserByID({
-                id: currentUser._id,
-                ...valid.data,
+            let respon = await userService.updateUserByEmail({
+                email: currentUser.email,
+                key: 'name',
+                payload: name,
             })
 
             if (respon && respon.errCode === 0) {

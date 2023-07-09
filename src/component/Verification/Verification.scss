@@ -86,6 +86,13 @@
                 }
             }
 
+            .no-limit {
+                display: flex;
+                align-items: center;
+                color: orange;
+                margin: 0 !important;
+            }
+
             .note {
                 text-align: center;
                 color: orange;

@@ -32,7 +32,7 @@ const Filter = ({ isOpenFilter, showModal, children, updateListDoExam, changeDat
     const [dayEnd, setDayEnd] = useState(null)
 
     let callAPI = async (buildData) => {
-        let respon = await examService.searchAllExamByUserID(buildData)
+        let respon = await examService.searchAllDoExamByUserId(buildData)
 
         if (respon && respon.errCode === 0) {
             updateListDoExam(respon.data)
@@ -47,7 +47,7 @@ const Filter = ({ isOpenFilter, showModal, children, updateListDoExam, changeDat
         form.validateFields().then((values) => {
             // Xử lý dữ liệu sau khi người dùng nhấp OK
             let buildData = {
-                userID: user.userInfo._id,
+                email: user.userInfo.email,
                 name,
                 score,
                 typeTurns,

@@ -100,7 +100,6 @@ function QuestionItem({
     }
 
     let handleChangeInput = (e, index) => {
-        console.log('listAnswer', listAnswer)
         listAnswer[index].title = e.target.value
         setListAnswer([...listAnswer])
     }

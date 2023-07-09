@@ -15,10 +15,12 @@ import { faEye } from '@fortawesome/free-regular-svg-icons'
 import { sideBarAdmin } from '../../component/RouteSideBar/routeSideBar'
 import SideBar from '../User/MyExam/SideBar/SideBar'
 import ReactPaginate from 'react-paginate'
+import FilterUser from '../../component/Filter/FilterUser/FilterUser'
 
 function ManageUser() {
     const { t } = useTranslation()
     const language = useSelector((state) => state.app.language)
+    const user = useSelector((state) => state.user)
 
     const [listUsers, setListUsers] = useState([])
 
@@ -38,6 +40,46 @@ function ManageUser() {
     //detail modal
     const [currentUser, setCurrentUser] = useState()
     const [isOpenModalDetail, setIsOpenModalDetail] = useState(false)
+
+    //filter
+    const [isOpenFilter, setIsOpenFilter] = useState(false)
+    const [keywordSearch, setKeywordSearch] = useState('')
+
+    const [arrayTableTitles, setArrayTableTitles] = useState([
+        {
+            key: 'name',
+            status: 'up',
+            value: t('admin.author'),
+        },
+        {
+            key: 'title',
+            status: 'up',
+            value: t('admin.exam-title'),
+        },
+        {
+            key: 'limit',
+            status: 'up',
+            value: t('admin.maximum-attempts'),
+        },
+        {
+            key: 'time',
+            status: 'up',
+            value: t('admin.exam-duration'),
+        },
+    ])
+
+    const [dataSearch, setDataSearch] = useState({
+        userID: user.userInfo._id,
+        nameExam: '',
+        currentJoin: null,
+        typeCurrentJoin: 'greater',
+        maxQuantity: 'L',
+        maxScore: 'S',
+        maxTime: 'T',
+        typeExam: 'ALL',
+        dayStart: null,
+        dayEnd: null,
+    })
 
     //call api when start page
 
@@ -117,6 +159,24 @@ function ManageUser() {
         setNewListExam(slicedData)
     }, [listUsers, currentPage])
 
+    const showModalFilter = (boonlean) => {
+        setIsOpenFilter(boonlean)
+    }
+
+    let changeDataSearch = (data) => {
+        setDataSearch(data)
+    }
+
+    let changeKeyWordSearch = (data) => {
+        setKeywordSearch(data)
+    }
+
+    let updateListDoExam = (data) => {
+        setCurrentPage(0)
+
+        setListUsers(data)
+    }
+
     return (
         <>
             <AdminNavigation />
@@ -125,6 +185,20 @@ function ManageUser() {
                 <div className="content">
                     <div className="manage-body">
                         <h2 className="title">{t('admin.manage-user')}</h2>
+                        <div className="filter">
+                            {/* <FontAwesomeIcon className="icon-filter" icon={faFilter} /> */}
+                            <FilterUser
+                                style={{ top: '26px' }}
+                                type="admin"
+                                isOpenFilter={isOpenFilter}
+                                showModal={showModalFilter}
+                                changeDataSearch={changeDataSearch}
+                                // type="manageExam"
+                                changeKeyWordSearch={changeKeyWordSearch}
+                                updateListDoExam={updateListDoExam}
+                                children={<span className="search">{t('content-your-exam.filter-exam')}</span>}
+                            />
+                        </div>
                         <div className="table-container">
                             <div className="table-head">
                                 <table>
@@ -193,6 +267,7 @@ function ManageUser() {
                                 onPageChange={handlePageChange}
                                 containerClassName={'pagination'}
                                 activeClassName={'active'}
+                                forcePage={currentPage}
                             />
                         </div>
                     </div>

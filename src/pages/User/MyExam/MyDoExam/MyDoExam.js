@@ -28,6 +28,8 @@ import ModalDetailUser from '../../../Admin/ModalDetailUser/ModalDetailUser'
 import Button from '../../../../component/ButtonNotify/ButtonNotify'
 import Filter from '../../../../component/Filter/Filter'
 import { sideBarUser } from '../../../../component/RouteSideBar/routeSideBar'
+import Spiner from '../../../../component/Spiner/Spiner'
+import NotFoundData from '../../../../component/NotFoundData/NotFoundData'
 
 function MyDoExam() {
     const { t } = useTranslation()
@@ -35,12 +37,14 @@ function MyDoExam() {
     let navigate = useNavigate()
     const user = useSelector((state) => state.user)
 
+    const [loadingApi, setLoadingApi] = useState(false)
+
     const [currentPage, setCurrentPage] = useState(0)
     const [itemsPerPage, setItemsPerPage] = useState(5)
     const [newListExam, setNewListExam] = useState([])
 
     //state
-    const [isLoading, setIsLoading] = useState(false)
+
     const [listDoExam, setListDoExam] = useState([])
     const [dataSearch, setDataSearch] = useState({})
     const [fieldSort, setFieldSort] = useState('nameExam')
@@ -80,7 +84,7 @@ function MyDoExam() {
     }
 
     let callAPI = async () => {
-        setIsLoading(true)
+        setLoadingApi(true)
 
         let respon = await examService.getAllDoExamByUserId({ email: user.userInfo.email })
 
@@ -88,7 +92,7 @@ function MyDoExam() {
             setListDoExam(respon.data)
         }
 
-        setIsLoading(false)
+        setLoadingApi(false)
     }
 
     useEffect(() => {
@@ -120,6 +124,7 @@ function MyDoExam() {
 
     let updateListDoExam = (data) => {
         setListDoExam(data)
+        setCurrentPage(0)
     }
 
     let handleSortByField = async (type, index) => {
@@ -184,23 +189,6 @@ function MyDoExam() {
 
     return (
         <>
-            {/* <LoadingOverlay
-                active={isLoading}
-                spinner={<BeatLoader color="white" />}
-                text="Đang tải..."
-                className="overlay"
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgba(0, 0, 0, 0.5)', // Màu nền bóng đổ
-                        position: 'fixed',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        zIndex: 9999,
-                    }),
-                }}
-            > */}
             <HeaderHome />
             <div className="my-exam-container">
                 <SideBar data={sideBarUser} />
@@ -208,18 +196,17 @@ function MyDoExam() {
                 <div className="content">
                     <div className="manage-body">
                         <h2 className="title">{t('content-your-exam.compilation-exams-participated')}</h2>
-
-                        {listDoExam && listDoExam.length > 0 && (
+                        <div className="filter">
+                            <Filter
+                                isOpenFilter={isOpenFilter}
+                                updateListDoExam={updateListDoExam}
+                                showModal={showModalFilter}
+                                changeDataSearch={changeDataSearch}
+                                children={<span className="search">{t('content-your-exam.filter-exam')}</span>}
+                            />
+                        </div>
+                        {listDoExam && listDoExam.length > 0 ? (
                             <>
-                                <div className="filter">
-                                    <Filter
-                                        isOpenFilter={isOpenFilter}
-                                        updateListDoExam={updateListDoExam}
-                                        showModal={showModalFilter}
-                                        changeDataSearch={changeDataSearch}
-                                        children={<span className="search">{t('content-your-exam.filter-exam')}</span>}
-                                    />
-                                </div>
                                 <div className="table-container">
                                     <div className="table-head">
                                         <table>
@@ -324,8 +311,13 @@ function MyDoExam() {
                                         onPageChange={handlePageChange}
                                         containerClassName={'pagination'}
                                         activeClassName={'active'}
+                                        forcePage={currentPage}
                                     />
                                 </div>
+                            </>
+                        ) : (
+                            <>
+                                <NotFoundData />
                             </>
                         )}
                     </div>
@@ -340,6 +332,7 @@ function MyDoExam() {
                     />
                 )}
             </div>
+            <Spiner loading={loadingApi} />
             {/* </LoadingOverlay> */}
         </>
     )

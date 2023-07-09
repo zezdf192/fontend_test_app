@@ -18,12 +18,17 @@ import { faCircleXmark, faMagnifyingGlass, faSpinner } from '@fortawesome/free-s
 import { toast } from 'react-toastify'
 import { useDebounce } from '../../hooks'
 import ModalPrivate from './HeaderHome/ModalPrivate/ModalPrivate'
+import Spiner from '../../component/Spiner/Spiner'
+import NotFoundData from '../../component/NotFoundData/NotFoundData'
 
 function HomePage() {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const user = useSelector((state) => state.user.userInfo)
     const [listExam, setListExam] = useState([])
+
+    //spiner
+    let [loadingApi, setLoadingApi] = useState(false)
 
     const [currentPage, setCurrentPage] = useState(0)
     const [itemsPerPage, setItemsPerPage] = useState(6)
@@ -33,7 +38,6 @@ function HomePage() {
     const [searchResult, setSearchResult] = useState([])
     const [showResult, setShowResult] = useState(false)
     const [loading, setLoading] = useState(false)
-
     //modal
     const [showModalCode, setShowModalCode] = useState(false)
 
@@ -44,10 +48,12 @@ function HomePage() {
     const inputRef = useRef()
 
     const callAPI = async () => {
+        setLoadingApi(true)
         const exam = await examService.getAllExam()
         if (exam && exam.errCode === 0) {
             setListExam([...exam.data])
         }
+        setLoadingApi(false)
     }
 
     useEffect(() => {
@@ -79,7 +85,11 @@ function HomePage() {
         const examID = data._id
 
         if (examID) {
-            navigate(`/verification/${examID}`)
+            if (user) {
+                navigate(`/verification/${user.email}/${user.name}/${examID}`)
+            } else {
+                navigate(`/verification/undefine/undefine/${examID}`)
+            }
         }
 
         const respon = await examService.getDetailExamRatings(examID)
@@ -88,7 +98,6 @@ function HomePage() {
             if (respon.data === null) {
                 setListExam([])
                 setExamInfor({})
-                toast.error(t('ratings.toast-no-data'))
             } else {
                 setListExam(respon.data.users)
                 setExamInfor(respon.data.data)
@@ -147,6 +156,26 @@ function HomePage() {
 
     let toggleShowModalCode = (boolean) => {
         setShowModalCode(boolean)
+    }
+
+    let buildOverLimit = (data) => {
+        if (data.limit.value !== 'L0') {
+            if (data.limit.valueNum === data.quantityJoin) {
+                return (
+                    <>
+                        <span>{t('home-page.out')}</span>
+                        <span>{t('home-page.limit')}</span>
+                    </>
+                )
+            }
+        }
+
+        return (
+            <>
+                <span>{data.quantityJoin || 0}</span>
+                <span>{t('home-page.exam')}</span>
+            </>
+        )
     }
 
     return (
@@ -217,57 +246,72 @@ function HomePage() {
                             children={<button className="input-code">Code</button>}
                         />
                     </div>
-                    <div className="list-exam">
-                        {newListExam &&
-                            newListExam.length > 0 &&
-                            newListExam.map((item, index) => (
-                                <div key={index} className="exam-item" onClick={() => handleChooseExam(item)}>
-                                    {item.data.image ? (
-                                        <div className="img-container">
-                                            <img
-                                                className="img"
-                                                src={item.data.image}
-                                                alt="Ảnh bị lỗi, vui lòng tải lại!"
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div className="span-img-container">
-                                            <h3 className="span-img">{item.data.title}</h3>
-                                        </div>
-                                    )}
-                                    {item.data.image ? (
-                                        <div className="exam-body">
-                                            <p className="exam-title">{item.data.title}</p>
-                                        </div>
-                                    ) : (
-                                        <></>
-                                    )}
+                    {newListExam && newListExam.length > 0 ? (
+                        <>
+                            <div className="list-exam">
+                                {newListExam.map((item, index) => (
+                                    <div key={index} className="exam-item" onClick={() => handleChooseExam(item)}>
+                                        {item.data.image ? (
+                                            <div className="img-container">
+                                                <img
+                                                    className="img"
+                                                    src={item.data.image}
+                                                    alt="Ảnh bị lỗi, vui lòng tải lại!"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="span-img-container">
+                                                <h3 className="span-img">{item.data.title}</h3>
+                                            </div>
+                                        )}
+                                        {item.data.image ? (
+                                            <div className="exam-body">
+                                                <p className="exam-title">{item.data.title}</p>
+                                            </div>
+                                        ) : (
+                                            <></>
+                                        )}
 
-                                    <div className="notify">
-                                        <div className="quantity">
-                                            <span>{item.data.quantityJoin || 0}</span>
-                                            <span>Exams</span>
+                                        <div
+                                            className={
+                                                item.data.limit.value !== 'L0'
+                                                    ? item.data.limit.valueNum === item.data.quantityJoin
+                                                        ? 'notify limit'
+                                                        : 'notify'
+                                                    : 'notify'
+                                            }
+                                        >
+                                            <div className="quantity">{buildOverLimit(item.data)}</div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
-                    </div>
-                    <ReactPaginate
-                        previousLabel={currentPage === 0 ? null : t('admin.previous')}
-                        nextLabel={
-                            currentPage === Math.ceil(listExam.length / itemsPerPage) - 1 ? null : t('admin.next')
-                        }
-                        breakLabel={'...'}
-                        breakClassName={'break-me'}
-                        pageCount={Math.ceil(listExam.length / itemsPerPage)} // Tổng số trang
-                        marginPagesDisplayed={2}
-                        pageRangeDisplayed={5}
-                        onPageChange={handlePageChange}
-                        containerClassName={'pagination'}
-                        activeClassName={'active'}
-                    />
+                                ))}
+                            </div>
+                            <ReactPaginate
+                                previousLabel={currentPage === 0 ? null : t('admin.previous')}
+                                nextLabel={
+                                    currentPage === Math.ceil(listExam.length / itemsPerPage) - 1
+                                        ? null
+                                        : t('admin.next')
+                                }
+                                breakLabel={'...'}
+                                breakClassName={'break-me'}
+                                pageCount={Math.ceil(listExam.length / itemsPerPage)} // Tổng số trang
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                onPageChange={handlePageChange}
+                                containerClassName={'pagination'}
+                                activeClassName={'active'}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <NotFoundData style={{ marginTop: '80px' }} />
+                        </>
+                    )}
                 </div>
             </div>
+
+            <Spiner loading={loadingApi} />
         </>
     )
 }

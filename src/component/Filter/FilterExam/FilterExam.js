@@ -17,7 +17,7 @@ import allCodeService from '../../../service/allCodeService'
 import Item from 'antd/es/list/Item'
 const { Option } = Select
 
-const FilterExam = ({ isOpenFilter, showModal, children, updateListDoExam, changeDataSearch }) => {
+const FilterExam = ({ isOpenFilter, showModal, children, updateListDoExam, changeDataSearch, type, style }) => {
     const { t } = useTranslation()
     const language = useSelector((state) => state.app.language)
     const user = useSelector((state) => state.user)
@@ -25,6 +25,7 @@ const FilterExam = ({ isOpenFilter, showModal, children, updateListDoExam, chang
     //state
     const [form] = Form.useForm()
     const [nameExam, setNameExam] = useState('')
+    const [auth, setAuth] = useState('')
 
     const [currentJoin, setCurrentJoin] = useState(null)
     const [typeCurrentJoin, setTypeCurrentJoin] = useState('greater')
@@ -117,12 +118,13 @@ const FilterExam = ({ isOpenFilter, showModal, children, updateListDoExam, chang
                 maxScore,
                 maxTime,
                 typeExam,
+                auth,
                 dayStart: dayStart ? dayStart : '',
                 dayEnd: dayEnd ? dayEnd : '',
             }
             callAPI(buildData)
             changeDataSearch(buildData)
-            console.log(123)
+
             form.resetFields()
             showModal(false)
         })
@@ -180,6 +182,7 @@ const FilterExam = ({ isOpenFilter, showModal, children, updateListDoExam, chang
                 {children}
             </span>
             <Modal
+                style={style}
                 className="modal-filter-container"
                 title={t('filter-exam.filter-data')}
                 open={isOpenFilter}
@@ -204,6 +207,27 @@ const FilterExam = ({ isOpenFilter, showModal, children, updateListDoExam, chang
                             }
                         />
                     </Form.Item>
+
+                    {type === 'admin' ? (
+                        <Form.Item label={t('filter-exam.search-auth')}>
+                            <Input
+                                placeholder={t('filter-exam.auth')}
+                                value={auth}
+                                onChange={(e) => setAuth(e.target.value)}
+                                suffix={
+                                    <span
+                                        className="icon-close"
+                                        style={{ minWidth: '12px', cursor: 'pointer' }}
+                                        onClick={() => setAuth('')}
+                                    >
+                                        {auth && <FontAwesomeIcon icon={faCircleXmark} />}
+                                    </span>
+                                }
+                            />
+                        </Form.Item>
+                    ) : (
+                        <></>
+                    )}
 
                     <Form.Item label={t('filter-exam.search-attempt')}>
                         <Input
