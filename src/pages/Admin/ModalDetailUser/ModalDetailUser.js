@@ -13,7 +13,7 @@ function ModalDetailUser({ handleCloseModalDetail, isOpenModal, data, type, rati
     const language = useSelector((state) => state.app.language)
     const [currentUser, setCurrentUser] = useState()
     const [hidden, setHidden] = useState(false)
-    console.log(data)
+
     useEffect(() => {
         setCurrentUser(data)
     }, [data])

@@ -110,7 +110,6 @@ function EditExam(props) {
 
             return result
         } else if (type === 'score') {
-            //console.log(array)
             let result =
                 array &&
                 array.length > 0 &&
@@ -156,7 +155,6 @@ function EditExam(props) {
             if (responLimit && responLimit.errCode === 0) {
                 let limit = buildOption(responLimit.data)
                 if (limit && limit.length > 0) {
-                    //console.log(limit)
                     //setSelectedLimit(limit[0])
                     setListLimit(limit)
                 }
@@ -173,7 +171,7 @@ function EditExam(props) {
 
         if (responScore && responScore.errCode === 0) {
             let score = buildOption(responScore.data, 'score')
-            //console.log(score)
+
             if (score && score.length > 0) {
                 //  setSelectedScore(score[0])
                 setListScore(score)
@@ -190,7 +188,7 @@ function EditExam(props) {
             let time = buildOption(responTime.data, 'time')
             if (time && time.length > 0) {
                 //setSelectedTime(time[0])
-                //console.log('time', time)
+
                 setListTime(time)
             }
         }
@@ -215,7 +213,7 @@ function EditExam(props) {
 
         if (responExam && responExam.errCode === 0) {
             let data = responExam.data.exam
-            //console.log(data)
+
             let copyScore = data.data.score
             let copyLimit = data.data.limit
             //copyLimit.isDisabled = data.data.limit.valueNum < data.data.quantityJoin
@@ -294,7 +292,6 @@ function EditExam(props) {
     //handle children component
 
     let renderQuestion = () => {
-        //console.log(listQuestions)
         return (
             listQuestions &&
             listQuestions.length > 0 &&
@@ -322,7 +319,6 @@ function EditExam(props) {
     }
 
     let deleteQuestion = (id) => {
-        console.log(id)
         setTypeModal('delete')
         setIsSubmit(true)
         renderQuestion()
@@ -359,7 +355,6 @@ function EditExam(props) {
             return
         } else {
             if (bool === false) {
-                //console.log(bool)
                 isCheck = false
             }
         }
@@ -378,7 +373,7 @@ function EditExam(props) {
         } else {
             setErrDescription('')
         }
-        //console.log(listQuestions)
+
         let total = 0
         let errScoreTotal = false
         for (let i = 0; i < listQuestions.length; i++) {
@@ -427,8 +422,6 @@ function EditExam(props) {
                 setError('crud-exam.error-total')
             }
         }
-
-        //console.log(listQuestions)
     }
 
     let checkChildren = (bool) => {
@@ -441,7 +434,7 @@ function EditExam(props) {
 
         setDescriptionModal('')
     }
-    //console.log(listQuestions)
+
     let handleDeleteQuestion = async (id) => {
         if (listQuestions && listQuestions.length > 0) {
             let array = listQuestions
@@ -467,7 +460,7 @@ function EditExam(props) {
     let handleFinnal = async () => {
         let newDate = new Date()
         newDate.setHours(23, 59, 59, 0)
-        //console.log(selectedTime)
+
         let data = {
             examID: examId,
             //email: userInfor._id,
@@ -486,8 +479,6 @@ function EditExam(props) {
             dateExamUpdate: newDate,
         }
 
-        //console.log(data)
-
         let respon = await examService.updateExamById(data)
         if (respon && respon.errCode === 0) {
             toast.success(t('toast.update-success'))
@@ -499,7 +490,6 @@ function EditExam(props) {
         } else {
             toast.error(t('toast.update-fail'))
         }
-        //console.log(user)
 
         setIsOpenModal(false)
         setDescriptionModal('')
@@ -526,7 +516,6 @@ function EditExam(props) {
         return result
     }
 
-    //console.log(selectedScore)
     return (
         <>
             <HeaderHome />

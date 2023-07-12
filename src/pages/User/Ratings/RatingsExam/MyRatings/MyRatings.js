@@ -16,6 +16,7 @@ import examService from '../../../../../service/examService'
 import ModalDetailUser from '../../../../Admin/ModalDetailUser/ModalDetailUser'
 import ReactPaginate from 'react-paginate'
 import Spiner from '../../../../../component/Spiner/Spiner'
+import NotFoundData from '../../../../../component/NotFoundData/NotFoundData'
 
 function MyRatings({ listMyRating }) {
     const { examId } = useParams()
@@ -165,7 +166,7 @@ function MyRatings({ listMyRating }) {
 
     return (
         <>
-            {listMyRatings && listMyRatings.length > 0 && (
+            {listMyRatings && listMyRatings.length > 0 ? (
                 <div className="table-container">
                     <div className="table-head">
                         <table>
@@ -247,6 +248,7 @@ function MyRatings({ listMyRating }) {
                             </tbody>
                         </table>
                     </div>
+
                     <ReactPaginate
                         previousLabel={currentPage === 0 ? null : t('admin.previous')}
                         nextLabel={
@@ -262,6 +264,10 @@ function MyRatings({ listMyRating }) {
                         activeClassName={'active'}
                     />
                 </div>
+            ) : (
+                <>
+                    <NotFoundData />
+                </>
             )}
 
             {isOpenModalDetail && (

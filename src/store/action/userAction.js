@@ -52,9 +52,10 @@ export const createNewUser = (data) => {
                 listLikeExam: [],
                 avatar: '',
                 roleID: 'R2',
-                userCreateID: [],
+                amountCreate: 0,
                 userExamID: [],
             }
+            //console.log(res)
             if (res && res.errCode === 0) {
                 //toast.success('')
                 dispatch({
@@ -82,16 +83,15 @@ export const fetchUserLoginWithSocial = (data) => {
     return async (dispatch, getState) => {
         try {
             let userInfo = {}
-
-            let resUSer = await userService.getDetailUser(data.email)
-            let res = await userService.loginAppBySocial(data)
+            let resUSer = await userService.getDetailUser(data._delegate.email ? data._delegate.email : data.email)
+            let res = await userService.loginAppBySocial(data._delegate)
 
             if (res && res.errCode === 0) {
                 userInfo = res.data
                 if (resUSer && resUSer.errCode === 0) {
-                    userInfo = { ...userInfo, avatar: resUSer.data[0].avatar }
+                    userInfo = { ...userInfo, name: resUSer.data[0].name, avatar: resUSer.data[0].avatar }
                 }
-                //console.log('userInfo', userInfo)
+
                 dispatch({
                     type: actionTypes.USER_LOGIN_WITH_SOCIAL_SUCCESS,
                     userInfo: userInfo,

@@ -70,8 +70,8 @@ function MyLoveExam() {
                         <h2>{t('favorite.favorite-exams')}</h2>
                         {newListExam && newListExam.length > 0 ? (
                             <>
-                                {newListExam.map((item) => {
-                                    return <LikeExamItem data={item} />
+                                {newListExam.map((item, index) => {
+                                    return <LikeExamItem key={index} data={item} />
                                 })}
                                 <>
                                     <ReactPaginate

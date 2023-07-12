@@ -19,6 +19,8 @@
     },
     "log-in": {
         "register": "Register",
+        "register-success": "Register success",
+        "register-fail": "Register fail",
         "email": "Email",
         "name": "Name",
         "password": "Password",
@@ -50,11 +52,12 @@
         "your-exam": "Your exam",
         "hello": "Hello {{name}}!",
         "exam-popular": "Some typical exam questions",
-        "exam-participated": "The exam you participated in",
+        "exam-participated": "Exam participated",
         "user-infor": "The information about you",
         "out": "Out",
         "limit": "limit",
-        "exam": "Exams"
+        "exam": "Exams",
+        "language": "Language"
     },
     "content-your-exam": {
         "compilation-exams-participated": "Compilation of exams you have participated in",

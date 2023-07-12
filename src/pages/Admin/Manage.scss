@@ -1,14 +1,73 @@
+@media (max-width: 1200px) and (min-width: 1023px) {
+}
+
+@media (max-width: 1199px) {
+    .admin-manage-container {
+        width: 100%;
+        .content-manage {
+            width: 100% !important;
+            margin: 0 70px !important;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .admin-manage-container {
+        width: 100%;
+        .content-manage {
+            width: 100% !important;
+            margin: 0 20px !important;
+            .table-container {
+                .table-body {
+                    table {
+                        .action {
+                            display: flex;
+                            gap: 20px !important;
+
+                            .btn-view {
+                                font-size: 1.8rem !important;
+                            }
+
+                            .btn-edit {
+                                font-size: 1.8rem !important;
+                            }
+
+                            .btn-delete {
+                                font-size: 1.8rem !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 .admin-manage-container {
     display: flex;
     margin-top: 80px;
-    .content {
+    .content-manage {
         width: 80%;
-        padding: 20px;
-        .manage-body {
-            .title {
+        margin: 0 90px;
+        .manage-body-admin {
+            .title-manage {
                 text-align: center;
                 margin: 30px 0 40px;
                 font-size: 2.6rem;
+            }
+            .filter {
+                text-align: right;
+                margin: 20px 0 12px;
+                padding: 6px;
+                .search {
+                    font-size: 1.9rem;
+                    font-weight: 600;
+                    color: #616161;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
             }
 
             .table-container {
@@ -70,6 +129,7 @@
                         width: 100%;
                         position: relative;
                         overflow: hidden;
+
                         border-bottom-left-radius: 10px;
                         border-bottom-right-radius: 10px;
                         border-collapse: collapse;
@@ -85,6 +145,9 @@
 
                         td,
                         th {
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            // white-space: nowrap;
                             padding: 16px;
                         }
 

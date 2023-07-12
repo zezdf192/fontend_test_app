@@ -103,10 +103,10 @@ function ModalEditUser({ isOpenModal, handleCloseModalEdit, data, handleSubmitMo
                         <div className="col-6  ">
                             <label>Email</label>
                             <input
-                                value={email}
-                                readOnly
-                                className={errEmail.length > 0 ? 'form-control py-2 input-error' : 'form-control py-2'}
                                 type="email"
+                                readOnly
+                                defaultValue={email}
+                                className={errEmail.length > 0 ? 'form-control py-2 input-error' : 'form-control py-2'}
                                 placeholder="Địa chỉ email"
                             />
                             <span className="error">{errEmail}</span>
@@ -127,7 +127,7 @@ function ModalEditUser({ isOpenModal, handleCloseModalEdit, data, handleSubmitMo
                         <div className="col-6 mt-5">
                             <label>{t('log-in.password')}</label>
                             <input
-                                value={password}
+                                defaultValue={password}
                                 readOnly
                                 className={
                                     errPassword.length > 0 ? 'form-control py-2 input-error' : 'form-control py-2'

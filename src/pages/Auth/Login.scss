@@ -1,4 +1,38 @@
 /** @format */
+@media (max-width: 1200px) and (min-width: 1023px) {
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .login-container {
+        padding: 0 40px !important;
+    }
+    .content-left {
+        display: none;
+    }
+    .login-content {
+        margin-top: 80px;
+        justify-content: center;
+    }
+    .content-right {
+        width: 80% !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .login-container {
+        padding: 0 20px !important;
+    }
+    .content-left {
+        display: none;
+    }
+    .login-content {
+        margin-top: 80px;
+        justify-content: center;
+    }
+    .content-right {
+        width: 80% !important;
+    }
+}
 
 .login-container {
     padding: 0 80px;
@@ -27,6 +61,7 @@
         display: flex;
         gap: 60px;
         .content-left {
+            margin-top: 80px;
             width: 60%;
             img {
                 width: 80%;

@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { createNewUser, fetchUserLoginWithSocial } from '../../store/action/userAction'
 import { changeLanguage } from '../../store/action/appAction'
+import { toast } from 'react-toastify'
 
 function SignUp() {
     //redux
@@ -40,10 +41,13 @@ function SignUp() {
     const [errRepeatPassword, setErrRepeatPassword] = useState('')
 
     const handleLoginSuccess = async (authResult) => {
-        console.log(authResult)
+        // console.log(authResult)
         const { user } = authResult
+        await dispatch(fetchUserLoginWithSocial(user))
 
-        dispatch(fetchUserLoginWithSocial(user))
+        if (user) {
+            navigate('/')
+        }
     }
 
     const uiConfig = {
@@ -56,7 +60,7 @@ function SignUp() {
         callbacks: {
             signInSuccessWithAuthResult: (authResult) => {
                 handleLoginSuccess(authResult)
-                return true
+                return false
             },
         },
     }
@@ -125,10 +129,16 @@ function SignUp() {
             let respon = await dispatch(createNewUser(valid.data))
             //console.log(respon)
             if (respon.errCode === 2) {
+                toast.error(t('log-in.register-fail'))
                 setErrEmail(respon.message)
             }
+            if (respon.errCode === 0) {
+                toast.success(t('log-in.register-success'))
 
-            navigate('/')
+                navigate('/')
+            }
+
+            //
         }
         //console.log({ email, name, password, repeatPassword, address, gender, roleID })
     }
@@ -151,14 +161,14 @@ function SignUp() {
             <div className="signup-content">
                 <div className="row">
                     <div className="col-12">
-                        <h3 className="title"> {t('log-in.register')}</h3>
+                        <h3 className="title-sign-up"> {t('log-in.register')}</h3>
                     </div>
                     <div className="col-12  ">
                         <input
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             onKeyDown={() => setErrEmail('')}
-                            className={errEmail.length > 0 ? 'form-control py-2 input-error' : 'form-control py-2'}
+                            className={errEmail.length > 0 ? 'form-control py-3 input-error' : 'form-control py-3'}
                             type="email"
                             placeholder={t('log-in.email')}
                         />
@@ -169,7 +179,7 @@ function SignUp() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             onKeyDown={() => setErrName('')}
-                            className={errName.length > 0 ? 'form-control py-2 input-error' : 'form-control py-2'}
+                            className={errName.length > 0 ? 'form-control py-3 input-error' : 'form-control py-3'}
                             type="text"
                             placeholder={t('log-in.name')}
                         />
@@ -181,7 +191,7 @@ function SignUp() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             onKeyDown={() => setErrPassword('')}
-                            className={errPassword.length > 0 ? 'form-control py-2 input-error' : 'form-control py-2'}
+                            className={errPassword.length > 0 ? 'form-control py-3 input-error' : 'form-control py-3'}
                             type="password"
                             placeholder={t('log-in.password')}
                         />
@@ -193,7 +203,7 @@ function SignUp() {
                             onChange={(e) => setRepeatPassword(e.target.value)}
                             onKeyDown={() => setErrRepeatPassword('')}
                             className={
-                                errRepeatPassword.length > 0 ? 'form-control py-2 input-error' : 'form-control py-2'
+                                errRepeatPassword.length > 0 ? 'form-control py-3 input-error' : 'form-control py-3'
                             }
                             type="password"
                             placeholder={t('log-in.confirm-password')}

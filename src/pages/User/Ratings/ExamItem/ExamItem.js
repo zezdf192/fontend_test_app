@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 function ExamItem({ data, handleChooseExamItem }) {
     const language = useSelector((state) => state.app.language)
     const { t } = useTranslation()
-    console.log(data)
+
     let buildOverLimit = (data) => {
         if (data.limit.value !== 'L0') {
             if (data.limit.valueNum === data.quantityJoin) {

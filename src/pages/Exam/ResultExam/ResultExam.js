@@ -34,7 +34,6 @@ function ResultExam() {
         // }
 
         if (respon && respon.errCode === 0) {
-            console.log(respon.data.data)
             setExamInfo(respon.data.data)
             setTypeExam(respon.data.examInfo.data.typeExam)
             setTypeAnswer(respon.data.examInfo.data.typeAnswer)
@@ -102,7 +101,14 @@ function ResultExam() {
                         {listQuestions &&
                             listQuestions.length > 0 &&
                             listQuestions.map((item, index) => {
-                                return <ResultQuestionItem index={index} questionInfo={item} myAnswer={listMyAnswer} />
+                                return (
+                                    <ResultQuestionItem
+                                        index={index}
+                                        key={index}
+                                        questionInfo={item}
+                                        myAnswer={listMyAnswer}
+                                    />
+                                )
                             })}
                     </div>
                 ) : (

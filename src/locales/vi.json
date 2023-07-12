@@ -19,6 +19,8 @@
     },
     "log-in": {
         "register": "Đăng ký",
+        "register-success": "Đăng ký thành công",
+        "register-fail": "Đăng ký thất bại",
         "email": "Email",
         "name": "Tên",
         "password": "Mật khẩu",
@@ -50,11 +52,12 @@
         "your-exam": "Bài thi của bạn",
         "hello": "Xin chào {{name}}!",
         "exam-popular": "Một số bài thi tiêu biểu",
-        "exam-participated": "Bài thi bạn đã tham gia",
+        "exam-participated": "Bài thi tham gia",
         "user-infor": "Thông tin của bạn",
         "out": "Hết",
         "limit": "lượt",
-        "exam": "lượt"
+        "exam": "lượt",
+        "language": "Ngôn ngữ"
     },
     "content-your-exam": {
         "compilation-exams-participated": "Tổng hợp bài thi bạn đã tham gia",

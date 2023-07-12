@@ -42,7 +42,7 @@ function UserMenu({ changeElement, doExam }) {
         <>
             <div className="user-menu-container">
                 <div className="user-menu-header">
-                    <ImgAvatar width="50px" alt="no-img" src={user && user.userInfo && user.userInfo.avatar} />
+                    <ImgAvatar width="60px" alt="no-img" src={user && user.userInfo && user.userInfo.avatar} />
                     <div className="user-menu-title">
                         <span className="name">{user && user.userInfo && user.userInfo.name}</span>
                         <span className="email">{user && user.userInfo && user.userInfo.email}</span>

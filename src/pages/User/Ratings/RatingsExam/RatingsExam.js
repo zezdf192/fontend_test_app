@@ -221,7 +221,7 @@ function RatingsExam() {
 
             for (let i = 0; i < copyData.length; i++) {
                 for (let j = 0; j < copyData[i].users.length; j++) {
-                    if (copyData[i].users[j].userID === user.userInfo._id) {
+                    if (copyData[i].users[j].email === user.userInfo.email) {
                         copyListMyRatings.push({
                             infor: copyData[i].users[j],
                             exam: copyData[i].data,

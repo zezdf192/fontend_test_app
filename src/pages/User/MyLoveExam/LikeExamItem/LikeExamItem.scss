@@ -16,6 +16,9 @@
         margin-right: 30px;
         border: 1px solid #ccc;
         border-radius: 16px;
+        &:hover {
+            cursor: pointer;
+        }
         .span-img {
             font-size: 3rem;
             overflow-wrap: anywhere;

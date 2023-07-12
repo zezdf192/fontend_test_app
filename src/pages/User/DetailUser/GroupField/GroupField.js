@@ -323,7 +323,8 @@ function GroupField() {
                                     maxLength="50"
                                     placeholder="Thêm tên của bạn"
                                     className="input-change"
-                                    value={user.userInfo.email}
+                                    defaultValue={user.userInfo.email}
+                                    readOnly
                                     disable
                                 />
                             </div>

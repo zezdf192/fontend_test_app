@@ -1,9 +1,18 @@
+@media (max-width: 1200px) and (min-width: 1023px) {
+}
+
+@media (max-width: 1199px) {
+    .sidebar-container {
+        display: none !important;
+    }
+}
+
 .sidebar-container {
-    width: 20%;
+    //width: 20%;
+    min-width: 310px;
     background-color: #fff;
 
     .list-action {
-        width: 310px;
         display: flex;
         flex-direction: column;
         margin-top: 40px;

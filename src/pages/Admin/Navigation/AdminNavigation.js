@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRightFromBracket, faBars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -10,12 +10,16 @@ import { NavLink } from 'react-router-dom'
 import './AdminNavigation.scss'
 import { fetchLogOut } from '../../../store/action/userAction'
 import ModalNotify from '../../../component/Modal/ModalNotify'
+import MobieMenu from '../../../component/MobieMenu/MobieMenu'
+import { menuMobie, menuMobieAdmin } from '../../../component/RouteSideBar/menuMobie'
 
 function AdminNavigation() {
     const { t } = useTranslation()
     const app = useSelector((state) => state.app.language)
     const dispatch = useDispatch()
     let navigate = useNavigate()
+
+    const [showMenuMobie, setShowMenuMobie] = useState(false)
 
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [descriptionModal, setDescriptionModal] = useState('')
@@ -39,21 +43,23 @@ function AdminNavigation() {
         navigate('/login')
     }
 
+    let togglehMenuMobie = (boolean) => {
+        setShowMenuMobie(boolean)
+    }
+
     return (
         <>
+            <MobieMenu togglehMenuMobie={togglehMenuMobie} listMenu={menuMobieAdmin} showMenuMobie={showMenuMobie} />
             <div className="navigation-container">
                 <div className="nav-body">
-                    <div className="content-left">
-                        <h2 className="title">ExamApp</h2>
+                    <div className="content-left-admin">
+                        <h2 className="title-admin">ExamApp</h2>
                     </div>
-                    <div className="content-right">
+                    <div className="nav-bar-admin">
+                        <FontAwesomeIcon icon={faBars} onClick={() => togglehMenuMobie(true)} />
+                    </div>
+                    <div className="content-right-admin">
                         <div className="navigate">
-                            <NavLink to="/admin/manageUser" className="item">
-                                {t('admin.manage-user')}
-                            </NavLink>
-                            <NavLink to="/admin/manageExam" className="item">
-                                {t('admin.manage-exam')}
-                            </NavLink>
                             <div className="language">
                                 <span
                                     className={app === 'en' ? 'active' : ''}

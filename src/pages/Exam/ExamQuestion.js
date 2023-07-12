@@ -18,6 +18,9 @@ function ExamQuestion({
 
     //xu ly khi chon nhieu cau tra loi
     const [listChooseAnswer, setListChooseAnswer] = useState([])
+
+    let keyAnswer = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
+
     useEffect(() => {
         setExam(examInfo)
     }, [examInfo])
@@ -66,6 +69,7 @@ function ExamQuestion({
                         examInfo.answers.map((item, index) => {
                             return (
                                 <div
+                                    key={index}
                                     onClick={() => handleChooseAnswer(examInfo.answers[index], index)}
                                     className={
                                         listAnswerChoose[questionActive] === index
@@ -73,7 +77,7 @@ function ExamQuestion({
                                             : 'answer-item'
                                     }
                                 >
-                                    <span>{item.keyAnswer}</span>
+                                    <span>{keyAnswer[index]}</span>
                                     {item.title}
                                 </div>
                             )

@@ -183,15 +183,16 @@ function CreateExam() {
         let copySelectedScore = selectedScore
         let copySelectedLimit = selectedLimit
         let copySelectedTime = selectedTime
+        if (copySelectedScore && copySelectedLimit && copySelectedTime) {
+            copySelectedScore.label = language === 'en' ? copySelectedScore.labelEn : copySelectedScore.labelVi
+            copySelectedLimit.label = language === 'en' ? copySelectedLimit.labelEn : copySelectedLimit.labelVi
+            copySelectedTime.label = language === 'en' ? copySelectedTime.labelEn : copySelectedTime.labelVi
 
-        copySelectedScore.label = language === 'en' ? copySelectedScore.labelEn : copySelectedScore.labelVi
-        copySelectedLimit.label = language === 'en' ? copySelectedLimit.labelEn : copySelectedLimit.labelVi
-        copySelectedTime.label = language === 'en' ? copySelectedTime.labelEn : copySelectedTime.labelVi
-
-        scoreInitQuestion(selectedScore.valueNum)
-        setSelectedScore(copySelectedScore)
-        setSelectedLimit(copySelectedLimit)
-        setSelectedTime(copySelectedTime)
+            setScoreInitQuestion(selectedScore.valueNum)
+            setSelectedScore(copySelectedScore)
+            setSelectedLimit(copySelectedLimit)
+            setSelectedTime(copySelectedTime)
+        }
     }
 
     useEffect(() => {
@@ -269,7 +270,7 @@ function CreateExam() {
     let deleteQuestion = (id) => {
         setTypeModal('delete')
         setIsSubmit(true)
-        renderQuestion()
+        // renderQuestion()
         setIsOpenModal(true)
         setCurrentIDQuestion(id)
         setDescriptionModal(t('crud-exam.do-remove-question'))
@@ -322,7 +323,7 @@ function CreateExam() {
         } else {
             setErrDescription('')
         }
-        console.log(listQuestions)
+
         let total = 0
         let errScoreTotal = false
         for (let i = 0; i < listQuestions.length; i++) {

@@ -37,7 +37,7 @@ const ModalPrivate = ({ isOpenFilter, children, toggleShowModalCode }) => {
 
     let callAPI = async (buildData) => {
         let respon = await examService.getExamPrivateByCode(buildData)
-        console.log('respon.data', respon.data)
+
         if (respon && respon.errCode === 0) {
             toggleShowModalCode(false)
             navigate(`/verification/${email}/${name}/${respon.data._id}`)

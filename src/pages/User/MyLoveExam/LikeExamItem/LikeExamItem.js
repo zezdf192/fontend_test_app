@@ -31,7 +31,7 @@ function LikeExamItem({ data }) {
                     alt=""
                 />
             ) : (
-                <div className="span-img-container">
+                <div className="span-img-container" onClick={() => hanldeClick(infoExam)}>
                     <h3 className="span-img">{infoExam && infoExam.data && infoExam.data.title}</h3>
                 </div>
             )}

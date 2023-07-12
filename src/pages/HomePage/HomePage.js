@@ -20,6 +20,7 @@ import { useDebounce } from '../../hooks'
 import ModalPrivate from './HeaderHome/ModalPrivate/ModalPrivate'
 import Spiner from '../../component/Spiner/Spiner'
 import NotFoundData from '../../component/NotFoundData/NotFoundData'
+import MobieMenu from '../../component/MobieMenu/MobieMenu'
 
 function HomePage() {
     const { t } = useTranslation()
@@ -189,7 +190,7 @@ function HomePage() {
                             <div className="search-body">
                                 <Tippy
                                     render={(attrs) => (
-                                        <div className="box" style={{ width: '560px' }} tabIndex="-1" {...attrs}>
+                                        <div className="box" tabIndex="-1" {...attrs}>
                                             <WrapperPoper>
                                                 {searchResult && searchResult.length > 0 ? (
                                                     searchResult.map((item, index) => (

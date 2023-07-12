@@ -6,8 +6,7 @@ import './ResultQuestionItem.scss'
 
 function ResultQuestionItem({ index, questionInfo, myAnswer }) {
     const [listAnswer, setListAnswer] = useState([])
-    console.log(myAnswer)
-    //console.log(questionInfo)
+
     useEffect(() => {
         setListAnswer(questionInfo.answers)
     }, [questionInfo])
@@ -35,13 +34,11 @@ function ResultQuestionItem({ index, questionInfo, myAnswer }) {
             listAnswer.length > 0 &&
             listAnswer.map((item, i) => {
                 return (
-                    <>
-                        <div key={i} className={handleNullAnswer(item)}>
-                            <label>{item.keyAnswer}</label>
+                    <div key={i} className={handleNullAnswer(item)}>
+                        <label>{item.keyAnswer}</label>
 
-                            <span>{item.title}</span>
-                        </div>
-                    </>
+                        <span>{item.title}</span>
+                    </div>
                 )
             })
         )

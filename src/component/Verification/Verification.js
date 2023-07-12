@@ -159,7 +159,7 @@ function Verification() {
                             </button>
                             {exam && exam.data && buildOverLimit(exam.data)}
                         </div>
-                        {!user.userInfo ? <span className="note"> {t('verifi.note')}</span> : <></>}
+                        {!email ? <span className="note"> {t('verifi.note')}</span> : <></>}
                     </div>
                 </div>
             </div>

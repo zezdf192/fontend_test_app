@@ -92,7 +92,6 @@ function StartExam() {
     }, [])
 
     let handleSubmitExam = (type) => {
-        console.log('type', type)
         let isCheck = false
         if (myAnswer) {
             for (let i = 0; i < myAnswer.length; i++) {

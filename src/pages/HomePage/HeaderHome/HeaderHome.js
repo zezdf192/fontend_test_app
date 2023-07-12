@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Tippy from '@tippyjs/react/headless'
 
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRightFromBracket, faBars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { NavLink, Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
@@ -20,6 +20,8 @@ import WrapperPoper from '../../User/Ratings/WrapperPoper/WrapperPoper'
 import UserMenu from './UserMenu/UserMenu'
 import nonAvatar from '../../../styles/svg/avatar.jpg'
 import { path } from '../../../until/constant'
+import MobieMenu from '../../../component/MobieMenu/MobieMenu'
+import { menuMobie } from '../../../component/RouteSideBar/menuMobie'
 
 let copyFunction = () => {}
 
@@ -29,6 +31,8 @@ function HeaderHome({ changeElement = copyFunction, doExam = false }) {
     const app = useSelector((state) => state.app.language)
     const dispatch = useDispatch()
     let navigate = useNavigate()
+
+    const [showMenuMobie, setShowMenuMobie] = useState(false)
 
     const [isShowUserInfo, setIsShowUserInfo] = useState(false)
 
@@ -51,22 +55,34 @@ function HeaderHome({ changeElement = copyFunction, doExam = false }) {
         setIsShowUserInfo(false)
     }
 
+    let togglehMenuMobie = (boolean) => {
+        setShowMenuMobie(boolean)
+    }
+
     return (
         <>
+            <MobieMenu togglehMenuMobie={togglehMenuMobie} listMenu={menuMobie} showMenuMobie={showMenuMobie} />
             <div className="headerhome-container">
                 <div className="nav-body">
-                    <div className="content-left">
-                        <Link onClick={(e) => changeElement(e, path.home)} to={path.home} className="title">
+                    <div className="content-left-header">
+                        <Link onClick={(e) => changeElement(e, path.home)} to={path.home} className="title-app">
                             ExamApp
                         </Link>
                     </div>
-                    <div className="content-right">
+                    <div className="nav-bar">
+                        <FontAwesomeIcon icon={faBars} onClick={() => togglehMenuMobie(true)} />
+                    </div>
+                    <div className="content-right-header">
                         <div className="navigate">
                             {/* <NavLink to="/admin/manageUser" className="item">
                             Quản lý người dùng
                         </NavLink> */}
                             {user && user.userInfo ? (
-                                <NavLink to="/myExam" onClick={(e) => changeElement(e, path.myExam)} className="item">
+                                <NavLink
+                                    to="/myExam"
+                                    onClick={(e) => changeElement(e, path.myExam)}
+                                    className="item your-exam"
+                                >
                                     {t('home-page.your-exam')}
                                 </NavLink>
                             ) : (

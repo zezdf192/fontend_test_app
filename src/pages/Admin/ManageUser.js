@@ -16,6 +16,7 @@ import { sideBarAdmin } from '../../component/RouteSideBar/routeSideBar'
 import SideBar from '../User/MyExam/SideBar/SideBar'
 import ReactPaginate from 'react-paginate'
 import FilterUser from '../../component/Filter/FilterUser/FilterUser'
+import NotFoundData from '../../component/NotFoundData/NotFoundData'
 
 function ManageUser() {
     const { t } = useTranslation()
@@ -182,9 +183,10 @@ function ManageUser() {
             <AdminNavigation />
             <div className="admin-manage-container">
                 <SideBar data={sideBarAdmin} />
-                <div className="content">
-                    <div className="manage-body">
-                        <h2 className="title">{t('admin.manage-user')}</h2>
+                <div className="content-manage">
+                    <div className="manage-body-admin">
+                        <h2 className="title-manage">{t('admin.manage-user')}</h2>
+
                         <div className="filter">
                             {/* <FontAwesomeIcon className="icon-filter" icon={faFilter} /> */}
                             <FilterUser
@@ -199,27 +201,26 @@ function ManageUser() {
                                 children={<span className="search">{t('content-your-exam.filter-exam')}</span>}
                             />
                         </div>
-                        <div className="table-container">
-                            <div className="table-head">
-                                <table>
-                                    <thead>
-                                        <tr className="table-header">
-                                            <th className="px-5">STT</th>
-                                            <th>{t('admin.email')}</th>
-                                            <th>{t('admin.name-user')}</th>
+                        {newListExam && newListExam.length > 0 ? (
+                            <div className="table-container">
+                                <div className="table-head">
+                                    <table>
+                                        <thead>
+                                            <tr className="table-header">
+                                                <th className="px-5">STT</th>
+                                                <th>{t('admin.email')}</th>
+                                                <th>{t('admin.name-user')}</th>
 
-                                            <th>{t('admin.action')}</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+                                                <th>{t('admin.action')}</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
 
-                            <div className="table-body">
-                                <table>
-                                    <tbody>
-                                        {newListExam &&
-                                            newListExam.length > 0 &&
-                                            newListExam.map((item, index) => {
+                                <div className="table-body">
+                                    <table>
+                                        <tbody>
+                                            {newListExam.map((item, index) => {
                                                 return (
                                                     <tr key={index}>
                                                         <td className="px-5">{index + 1}</td>
@@ -249,27 +250,32 @@ function ManageUser() {
                                                     </tr>
                                                 )
                                             })}
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <ReactPaginate
+                                    previousLabel={currentPage === 0 ? null : t('admin.previous')}
+                                    nextLabel={
+                                        currentPage === Math.ceil(listUsers.length / itemsPerPage) - 1
+                                            ? null
+                                            : t('admin.next')
+                                    }
+                                    breakLabel={'...'}
+                                    breakClassName={'break-me'}
+                                    pageCount={Math.ceil(listUsers.length / itemsPerPage)} // Tổng số trang
+                                    marginPagesDisplayed={2}
+                                    pageRangeDisplayed={5}
+                                    onPageChange={handlePageChange}
+                                    containerClassName={'pagination'}
+                                    activeClassName={'active'}
+                                    forcePage={currentPage}
+                                />
                             </div>
-                            <ReactPaginate
-                                previousLabel={currentPage === 0 ? null : t('admin.previous')}
-                                nextLabel={
-                                    currentPage === Math.ceil(listUsers.length / itemsPerPage) - 1
-                                        ? null
-                                        : t('admin.next')
-                                }
-                                breakLabel={'...'}
-                                breakClassName={'break-me'}
-                                pageCount={Math.ceil(listUsers.length / itemsPerPage)} // Tổng số trang
-                                marginPagesDisplayed={2}
-                                pageRangeDisplayed={5}
-                                onPageChange={handlePageChange}
-                                containerClassName={'pagination'}
-                                activeClassName={'active'}
-                                forcePage={currentPage}
-                            />
-                        </div>
+                        ) : (
+                            <>
+                                <NotFoundData />
+                            </>
+                        )}
                     </div>
                 </div>
 
